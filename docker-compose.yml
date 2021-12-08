@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      target: install-deps
+    ports:
+      - 5000:5000
+    environment:
+      - DB_HOST=db
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/app:z
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432

@@ -1,0 +1,7 @@
+Flask
+
+# db / ORM
+SQLAlchemy
+sqlalchemy-utils
+# Postgres support
+psycopg2-binary
