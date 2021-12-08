@@ -14,10 +14,11 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     specific_recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
     greeting_id = sa.Column(sa.ForeignKey('greetings.id'), nullable=False)
+    upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
 
-    language = orm.relationship('Language', back_populates='letters')
-    greeting = orm.relationship('Greeting', back_populates='letters')
-    upload = orm.relationship('Upload', back_populates='letters')
+    language = orm.relationship('Language', backref='letters')
+    greeting = orm.relationship('Greeting', backref='letters')
+    upload = orm.relationship('Upload', backref='letters')
     specific_recipient = orm.relationship(
-        'Recipient', back_populates='specific_letters'
+        'Recipient', backref='specific_letters'
     )
