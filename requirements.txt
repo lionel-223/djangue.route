@@ -1,5 +1,8 @@
 Flask
 
+# i18n
+Flask-Babel
+
 # db / ORM
 SQLAlchemy
 sqlalchemy-utils
