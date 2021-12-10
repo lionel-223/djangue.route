@@ -3,6 +3,8 @@ Flask
 # i18n
 Flask-Babel
 
+Flask-WTF
+
 # db / ORM
 SQLAlchemy
 sqlalchemy-utils
