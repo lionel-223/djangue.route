@@ -9,6 +9,7 @@ services:
       - 5000:5000
     environment:
       - DB_HOST=db
+      - DB_PORT=5432
       - FLASK_DEBUG=1
     volumes:
       - .:/app:z

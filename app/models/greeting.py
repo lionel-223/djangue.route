@@ -1,5 +1,12 @@
 from app import db
 
 
+GREETINGS_TEXTS = {
+    1: 'Coucou',
+    2: 'Bonjour',
+}
+
+
 class Greeting(db.TimedMixin, db.IdMixin, db.Base):
-    pass
+    def __str__(self):
+        return GREETINGS_TEXTS.get(self.id)
