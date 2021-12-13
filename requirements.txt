@@ -4,6 +4,7 @@ Flask
 Flask-Babel
 
 Flask-WTF
+email-validator
 
 # db / ORM
 SQLAlchemy

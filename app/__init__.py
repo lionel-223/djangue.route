@@ -5,6 +5,8 @@ from flask import Blueprint, Flask, request
 from flask.json import JSONEncoder
 from flask_babel import Babel
 
+from app import config
+
 
 babel = Babel()
 APP_FOLDER = Path(__file__).parent
@@ -41,6 +43,7 @@ class Blueprint(Blueprint):
 def create_app():
     app = Flask(__name__)
     app.json_encoder = StandardJSONEncoder
+    app.config['SECRET_KEY'] = config.SECRET_KEY
     babel.init_app(app)
     for module in MODULES_FOLDER.glob('./*/'):
         module = importlib.import_module(f'.{module.stem}', 'app.modules')
