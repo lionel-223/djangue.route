@@ -5,4 +5,4 @@ from . import bp
 
 @bp.get('/')
 def index():
-    return render_template('base.html')
+    return render_template('index.html')
