@@ -4,8 +4,8 @@ from app import db
 
 
 LANGUAGES_NAMES = {
+    'en': 'Anglais',
     'fr': 'Français',
-    'en': 'English',
 }
 
 
@@ -18,4 +18,4 @@ class Language(db.TimedMixin, db.Base):
     has_translations = sa.Column(sa.Boolean)
 
     def __str__(self):
-        return LANGUAGES_NAMES.get(self.code)
+        return LANGUAGES_NAMES.get(self.code, repr(self))

@@ -4,10 +4,10 @@ from app import db
 
 
 COUNTRY_NAMES = {
+    'BE': 'Belgique',
     'FR': 'France',
-    'BE': 'Belgium',
-    'GB': 'United Kingdom',
-    'US': 'United States',
+    'GB': 'Royaume-Uni',
+    'US': 'États-Unis',
 }
 
 
@@ -17,4 +17,4 @@ class Country(db.Base):
     code = sa.Column(sa.String, nullable=False, primary_key=True)
 
     def __str__(self):
-        return COUNTRY_NAMES.get(self.code)
+        return COUNTRY_NAMES.get(self.code, repr(self))

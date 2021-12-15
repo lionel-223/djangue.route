@@ -20,3 +20,6 @@ class Base:
         if name.endswith('y'):
             return name[:-1] + 'ies'
         return name + 's'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

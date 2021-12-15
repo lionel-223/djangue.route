@@ -8,15 +8,11 @@
 
 	<body>
 		<h1>1 Lettre 1 Sourire</h1>
-        <div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <span style="color: red;">{{ message }}</span>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-        </div>
+		<div>
+			{% for message in get_flashed_messages() %}
+			<span style="color: red;">{{ message }}</span>
+			{% endfor %}
+		</div>
 		{% block content %}{% endblock %}
 	</body>
 </html>

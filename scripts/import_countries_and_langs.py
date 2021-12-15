@@ -13,6 +13,7 @@ country_codes = requests.get(COUNTRY_CODES_DATA_URL).text
 reader = csv.DictReader(country_codes.splitlines(), skipinitialspace=True)
 codes = (x['Alpha-2 code'] for x in reader)
 for code in codes:
+    print('Adding', code, 'to countries')
     db.get_or_create(Country, code=code)
 db.session.commit()
 
@@ -20,5 +21,6 @@ language_codes = requests.get(LANGUAGE_CODES_DATA_URL).text
 reader = csv.DictReader(language_codes.splitlines())
 codes = (x['alpha2'] for x in reader)
 for code in codes:
+    print('Adding', code, 'to languages')
     db.get_or_create(Language, code=code)
 db.session.commit()

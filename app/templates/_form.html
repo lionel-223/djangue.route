@@ -1,0 +1,6 @@
+<form action="" method="post">
+	{{ form.hidden_tag() }}
+	{% for field in form if field.widget.input_type != 'hidden' %}
+	{% include "_field.html" %}
+	{% endfor %}
+</form>
