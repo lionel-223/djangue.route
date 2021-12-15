@@ -41,7 +41,7 @@ def register():
 
     form = RegistrationForm()
     if not form.validate_on_submit():
-        return render_template('register.html', title='Inscription', form=form)
+        return render_template('register.html', form=form)
 
     user = User(email=form.email.data)
     user.set_password(form.password.data)

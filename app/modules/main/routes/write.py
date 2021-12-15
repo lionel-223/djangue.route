@@ -11,6 +11,7 @@ def write(event=None):
     form = LetterForm()
     if not form.validate_on_submit():
         return render_template('write.html', form=form)
+
     letter = Letter(
         event=event,
         language_code=form.language_code.data,
