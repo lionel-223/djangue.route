@@ -20,3 +20,5 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - 5435:5432
+    volumes:
+      - /var/lib/postgresql/data
