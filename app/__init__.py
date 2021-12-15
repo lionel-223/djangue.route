@@ -27,17 +27,12 @@ def get_locale():
     return request.accept_languages.best_match([x.code for x in langs])
 
 
-class MutableArgsRequest(Request):
-    parameter_storage_class = dict
-
-
 class StandardJSONEncoder(JSONEncoder):
     def default(self, obj):
         return json.dumps(obj, default=str)
 
 
 class Flask(BaseFlask):
-    # request_class = MutableArgsRequest
     json_encoder = StandardJSONEncoder
 
     def __init__(self, name=__name__, *args, **kwargs):
