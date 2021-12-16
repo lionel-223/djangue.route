@@ -4,6 +4,13 @@ from sqlalchemy import orm
 from app import db
 
 
+recipients_languages = sa.Table(
+    'recipients_languages', db.Base.metadata,
+    sa.Column('recipient_id', sa.ForeignKey('recipients.id')),
+    sa.Column('language_code', sa.ForeignKey('languages.code'))
+)
+
+
 class RecipientType(db.IdMixin, db.Base):
     def __str__(self):
         return {
@@ -17,7 +24,8 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
     type_id = sa.Column(sa.ForeignKey('recipient_types.id'))
     name = sa.Column(sa.String)
     receives_letters = sa.Column(sa.Boolean)
-    # frequency
-    # date
+    languages = orm.relationship("Language", secondary=recipients_languages)
+    nb_letters = sa.Column(sa.Integer)
+    frequency = sa.Column(sa.Integer)  # Nb of months between each letters pack sent
 
     type = orm.relationship('RecipientType', backref='recipients')

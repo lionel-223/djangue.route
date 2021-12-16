@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<h2>Inscrire mon établissement ou mon association pour recevoir des lettres.</h2>
+    <div>
+        Si vous avez déjà un compte utilisateur, merci de vous connecter
+        <a href="{{ url_for('main.login', next=url_for('main.register_recipient')) }}">ici</a>
+        avant d'inscrire votre établissement/association.
+    </div>
+	{% include "_form.html" %}
+{% endblock %}

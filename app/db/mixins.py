@@ -16,6 +16,7 @@ class TimedMixin:
 class LocationMixin:
     zipcode = sa.Column(sa.String)
     address = sa.Column(sa.String)
+    city = sa.Column(sa.String)
 
     @orm.declared_attr
     def country_code(_cls):

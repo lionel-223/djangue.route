@@ -8,8 +8,8 @@ from app.models import User
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
+    password = PasswordField('Mot de passe', validators=[DataRequired()])
+    remember_me = BooleanField('Se souvenir de moi')
     submit = SubmitField('Se connecter')
 
 

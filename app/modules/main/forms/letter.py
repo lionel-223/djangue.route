@@ -15,8 +15,9 @@ class LetterForm(FlaskForm):
     upload = FileField("Photo", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     email = StringField("Email", validators=[DataRequired(), Email()])
     country_code = SelectField("Pays", validators=[DataRequired()])
+    city = StringField("Ville")
     zipcode = StringField("Code postal")
-    specific_recipient_id = SelectField("Destinatation", validators=[Optional()], default='')
+    specific_recipient_id = SelectField("Destination", validators=[Optional()], default='')
     terms_agreement = BooleanField("J'accepte les conditions", validators=[DataRequired()])
     allow_reuse = BooleanField("J'autorise l'utilisation de ma lettre anonymisée sur les réseaux sociaux")
     submit = SubmitField("Envoyer")
@@ -26,7 +27,6 @@ class LetterForm(FlaskForm):
         self.greeting_id.choices = [
             (greeting.id, str(greeting)) for greeting in db.session.query(Greeting)
         ]
-        self.language_code.default = get_locale
         self.language_code.choices = [
             (language.code, str(language)) for language in
             db.session.query(Language).filter_by(accepts_letters=True)
