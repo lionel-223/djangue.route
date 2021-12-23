@@ -32,7 +32,7 @@ def register_recipient():
         frequency=form.frequency.data or None,
         nb_letters=form.nb_letters.data or None,
     )
-    # recipient.users.append(db.session.get(User, current_user.id))
+    recipient.users.append(current_user)
     db.session.add(recipient)
     db.session.commit()
     flash('Inscription réussie!')
