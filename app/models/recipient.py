@@ -24,8 +24,8 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
     type_id = sa.Column(sa.ForeignKey('recipient_types.id'))
     name = sa.Column(sa.String)
     receives_letters = sa.Column(sa.Boolean)
-    languages = orm.relationship("Language", secondary=recipients_languages)
     nb_letters = sa.Column(sa.Integer)
     frequency = sa.Column(sa.Integer)  # Nb of months between each letters pack sent
 
+    languages = orm.relationship("Language", secondary=recipients_languages)
     type = orm.relationship('RecipientType', backref='recipients')
