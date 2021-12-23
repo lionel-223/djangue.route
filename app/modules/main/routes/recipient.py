@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user
 
 from app import db
-from app.models import User, Recipient
+from app.models import User, Recipient, Language
 from .. import bp, RecipientForm
 
 
@@ -28,7 +28,7 @@ def register_recipient():
         zipcode=form.zipcode.data,
         city=form.city.data,
         country_code=form.country_code.data,
-        languages=form.languages.data,
+        languages=[db.session.get(Language, x) for x in form.languages.data or []],
         frequency=form.frequency.data or None,
         nb_letters=form.nb_letters.data or None,
     )
