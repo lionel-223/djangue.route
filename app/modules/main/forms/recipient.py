@@ -16,8 +16,8 @@ class RecipientForm(FlaskForm):
     city = StringField("Ville", validators=[DataRequired()])
     country_code = SelectField("Pays", validators=[DataRequired()])
     languages = SelectMultipleField("Langue(s) acceptée(s) pour les lettres", validators=[DataRequired()])
-    frequency = IntegerField("Fréquence d'envoi des lettres (en nombre de mois entre chaque envoi)", validators=[Optional()])
-    nb_letters = IntegerField("Nombre de lettres souhaité par envoi", validators=[Optional(), NumberRange(max=200)])
+    frequency = IntegerField("Fréquence d'envoi des lettres (en nombre de mois entre chaque envoi)", default=1)
+    nb_letters = IntegerField("Nombre de lettres souhaité par envoi", default=20, validators=[Optional(), NumberRange(max=200)])
     submit = SubmitField("Enregistrer")
 
     def __init__(self, *args, **kwargs):
@@ -32,5 +32,5 @@ class RecipientForm(FlaskForm):
         ]
         self.languages.choices = [
             (language.code, str(language)) for language
-            in db.session.query(Language)
+            in db.session.query(Language).filter_by(accepts_letters=True)
         ]

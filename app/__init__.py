@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from flask import Blueprint, Flask as BaseFlask, request
 from flask.json import JSONEncoder
-from flask.wrappers import Request
 from flask_babel import Babel
 from flask_login import LoginManager
 
