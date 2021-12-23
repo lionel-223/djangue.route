@@ -19,5 +19,13 @@
 	Vous représentez un EHPAD ou une association et vous souhaitez recevoir des lettres?
     <a href="{{ url_for('main.register_recipient') }}" class="button">Inscrivez votre établissement ou association</a>
 </div>
+<div>
+	<p>Vos établissements :</p>
+	<ul>
+	{% for recipient in current_user.recipients %}
+		<li>{{ recipient }}</li>
+	{% endfor %}
+	</ul>
+</div>
 
 {% endblock %}

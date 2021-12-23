@@ -29,3 +29,6 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
 
     languages = orm.relationship("Language", secondary=recipients_languages)
     type = orm.relationship('RecipientType', backref='recipients')
+
+    def __str__(self):
+        return f'{self.name} ({self.type})'
