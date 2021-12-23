@@ -16,6 +16,7 @@ users_recipients = sa.Table(
 class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     email = sa.Column(sa.String)
     password_hash = sa.Column(sa.String(128))
+
     recipients = orm.relationship("Recipient", secondary=users_recipients, backref="users")
 
     def set_password(self, password):

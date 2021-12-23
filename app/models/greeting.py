@@ -9,4 +9,4 @@ GREETINGS_TEXTS = {
 
 class Greeting(db.TimedMixin, db.IdMixin, db.Base):
     def __str__(self):
-        return GREETINGS_TEXTS.get(self.id)
+        return GREETINGS_TEXTS.get(self.id, self.id)
