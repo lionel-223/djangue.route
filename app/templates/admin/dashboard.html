@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col s6">
+			<h2>Lettres</h2>
+			<ul class="collection">
+				<li class="collection-item">
+					<div>
+						<span class="title">Toutes :</span>
+						<span class="secondary-content locale-number">{{ stats.letters_count }}</span>
+					</div>
+				</li>
+				<li class="collection-item">
+					<div>
+						<span class="title">Cette semaine :</span>
+						<span class="secondary-content locale-number">{{ stats.letters_week_count }}</span>
+					</div>
+				</li>
+				<li class="collection-item">
+					<div>
+						<span class="title">Non modéré :</span>
+						<span class="secondary-content locale-number">{{ stats.letters_unmoderated_count }}</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
