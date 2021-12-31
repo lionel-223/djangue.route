@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, SelectField, IntegerField, SelectM
 from wtforms.validators import DataRequired, Email, Optional, NumberRange
 
 from app import db
-from app.models import Country, Language, RecipientType
+from app.models import Country, Language, Recipient
 
 
 class RecipientForm(FlaskForm):
@@ -23,8 +23,8 @@ class RecipientForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.type_id.choices = [
-            (recipient_type.id, str(recipient_type)) for recipient_type
-            in db.session.query(RecipientType)
+            (recipient_type, str(recipient_type)) for recipient_type
+            in Recipient.Types
         ]
         self.country_code.choices = [
             (country.code, str(country)) for country

@@ -14,7 +14,7 @@ recipients_languages = sa.Table(
 
 
 class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
-    class Type(enum.Enum):
+    class Types(enum.Enum):
         retirement_home = enum.auto()
         association = enum.auto()
 
@@ -23,7 +23,7 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
     receives_letters = sa.Column(sa.Boolean)
     nb_letters = sa.Column(sa.Integer)
     frequency = sa.Column(sa.Integer)  # Nb of months between each letters pack sent
-    type = sa.Column(sa.Enum(Type))
+    type = sa.Column(sa.Enum(Types, native_enum=False))
 
     languages = orm.relationship("Language", secondary=recipients_languages)
 
