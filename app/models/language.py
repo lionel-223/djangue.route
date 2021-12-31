@@ -6,6 +6,9 @@ from app import db
 LANGUAGES_NAMES = {
     'en': 'Anglais',
     'fr': 'Français',
+    'es': 'Espagnol',
+    'de': 'Allemand',
+    'nl': 'Néerlandais',
 }
 
 

@@ -67,4 +67,12 @@ def create_app():
     def load_user(user_id):
         return db.session.get(User, int(user_id))
 
+    init_static_data()
+
     return app
+
+
+def init_static_data():
+    for script in ('import_countries_and_langs', 'create_default_greetings'):
+        module = importlib.import_module(f'scripts.{script}')
+        module.main()

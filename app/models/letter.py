@@ -13,7 +13,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     allow_reuse = sa.Column(sa.Boolean, nullable=False)
     specific_recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
-    greeting_id = sa.Column(sa.ForeignKey('greetings.id'), nullable=False)
+    greeting_key = sa.Column(sa.ForeignKey('greetings.key'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
 
     language = orm.relationship('Language', backref='letters')

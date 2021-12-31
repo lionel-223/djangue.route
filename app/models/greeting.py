@@ -2,11 +2,11 @@ from app import db
 
 
 GREETINGS_TEXTS = {
-    1: 'Coucou',
-    2: 'Bonjour',
+    'coucou': 'Coucou',
+    'bonjour': 'Bonjour',
 }
 
 
-class Greeting(db.TimedMixin, db.IdMixin, db.Base):
+class Greeting(db.TimedMixin, db.KeyMixin, db.Base):
     def __str__(self):
-        return GREETINGS_TEXTS.get(self.id, self.id)
+        return GREETINGS_TEXTS.get(self.key, self.key)

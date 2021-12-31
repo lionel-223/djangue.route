@@ -9,7 +9,7 @@ from app.models import Greeting, Language, Recipient, Country
 
 class LetterForm(FlaskForm):
     language_code = SelectField("Langue", validators=[DataRequired()], default=get_locale)
-    greeting_id = SelectField("Salutation", coerce=int, validators=[DataRequired()])
+    greeting_key = SelectField("Salutation", validators=[DataRequired()])
     content = TextAreaField("Contenu", validators=[DataRequired(), Length(min=120)])
     signature = StringField("Signature", validators=[DataRequired()])
     upload = FileField("Photo", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
@@ -24,8 +24,8 @@ class LetterForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.greeting_id.choices = [
-            (greeting.id, str(greeting)) for greeting in db.session.query(Greeting)
+        self.greeting_key.choices = [
+            (greeting.key, str(greeting)) for greeting in db.session.query(Greeting)
         ]
         self.language_code.choices = [
             (language.code, str(language)) for language in
@@ -38,4 +38,5 @@ class LetterForm(FlaskForm):
         self.country_code.choices = [
             (country.code, str(country)) for country
             in db.session.query(Country)
+            if str(country)[0] != '<' # Exclude untranslated countries
         ]

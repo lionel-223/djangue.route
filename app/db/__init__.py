@@ -26,4 +26,4 @@ if not sa_utils.database_exists(engine.url):
     sa_utils.create_database(engine.url)
 
 from .actions import get_or_create
-from .mixins import IdMixin, TimedMixin, LocationMixin
+from .mixins import IdMixin, KeyMixin, TimedMixin, LocationMixin

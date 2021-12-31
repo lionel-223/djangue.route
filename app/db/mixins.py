@@ -7,10 +7,17 @@ from sqlalchemy import orm
 class IdMixin:
     id = sa.Column(sa.Integer, primary_key=True)
 
+
+@orm.declarative_mixin
+class KeyMixin:
+    key = sa.Column(sa.String, primary_key=True, nullable=False, unique=True)
+
+
 @orm.declarative_mixin
 class TimedMixin:
     created_at = sa.Column(sa.DateTime, default=datetime.utcnow)
     updated_at = sa.Column(sa.DateTime, onupdate=datetime.utcnow)
+
 
 @orm.declarative_mixin
 class LocationMixin:
