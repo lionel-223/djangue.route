@@ -1,3 +1,5 @@
+import enum
+
 import sqlalchemy as sa
 from sqlalchemy import orm
 
@@ -5,6 +7,18 @@ from app import db
 
 
 class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
+    class Status(enum.Enum):
+        not_moderated = enum.auto()
+        approved = enum.auto()
+        rejected = enum.auto()
+
+        def __str__(self):
+            return {
+                self.not_moderated: 'A modérer',
+                self.approved: 'Approuvée',
+                self.rejected: 'Refusée',
+            }.get(self, self.name)
+
     email = sa.Column(sa.String, nullable=False)
     event = sa.Column(sa.String)
     content = sa.Column(sa.String, nullable=False)
@@ -15,6 +29,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
     greeting_key = sa.Column(sa.ForeignKey('greetings.key'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
+    status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
 
     language = orm.relationship('Language', backref='letters')
     greeting = orm.relationship('Greeting', backref='letters')

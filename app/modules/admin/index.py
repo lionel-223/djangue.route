@@ -9,16 +9,20 @@ from . import bp
 @bp.route('/')
 def index():
     today = datetime.utcnow()
-    week_start = today - timedelta(days=today.weekday())
+    week_start = today - timedelta(days=today.weekday(), hours=today.hour, minutes=today.minute, seconds=today.second)
     stats = {
         'letters_count': db.session.query(Letter).count(),
         'letters_week_count': (
             db.session.query(Letter)
             .filter(Letter.created_at >= week_start)
         ).count(),
-        'letters_unmoderated_count': '/',
+        'letters_unmoderated_count': (
+            db.session.query(Letter)
+            .filter(Letter.status == "not_moderated")
+        ).count(),
     }
     return render_template('admin/dashboard.html', stats=stats)
+
 
 @bp.route('/moderation')
 def moderation():

@@ -12,7 +12,6 @@ recipients_languages = sa.Table(
 )
 
 
-
 class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
     class Types(enum.Enum):
         retirement_home = enum.auto()
