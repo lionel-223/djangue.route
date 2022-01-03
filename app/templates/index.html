@@ -9,7 +9,15 @@
 </ul>
 {% else %}
 <h3>Bienvenue, {{ current_user.email }}</h3>
-<a href="{{ url_for('main.logout') }}">Déconnexion</a>
+<ul>
+    <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
+    {% if current_user.can_moderate %}
+        <li><a href="{{ url_for('admin.moderation') }}">Modérer des lettres</a></li>
+    {% endif %}
+    {% if current_user.can_see_stats %}
+        <li><a href="{{ url_for('admin.index') }}">Dashboard admin</a></li>
+    {% endif %}
+</ul>
 {% endif %}
 
 <div>
@@ -19,6 +27,7 @@
 	Vous représentez un EHPAD ou une association et vous souhaitez recevoir des lettres?
     <a href="{{ url_for('main.register_recipient') }}" class="button">Inscrivez votre établissement ou association</a>
 </div>
+{% if current_user and current_user.recipients|length > 0 %}
 <div>
 	<p>Vos établissements :</p>
 	<ul>
@@ -27,5 +36,6 @@
 	{% endfor %}
 	</ul>
 </div>
+{% endif %}
 
 {% endblock %}

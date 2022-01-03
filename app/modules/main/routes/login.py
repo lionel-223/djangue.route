@@ -26,7 +26,7 @@ def login():
 
     login_user(user, remember=form.remember_me.data)
     flash('Connexion réussie')
-    return target
+    return redirect(target)
 
 
 @bp.route('/logout/')

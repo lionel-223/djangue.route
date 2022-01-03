@@ -22,7 +22,7 @@ def register_recipient():
         db.session.commit()
         login_user(user)
     recipient = Recipient(
-        type_id=form.type_id.data,
+        type=form.type.data,
         name=form.name.data,
         address=form.address.data,
         zipcode=form.zipcode.data,
