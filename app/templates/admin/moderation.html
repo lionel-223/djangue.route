@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<h2>Modération</h2>
+
+{% if letter %}
+<div>{{ letter.created_at }}</div>
+<div>{{ letter.language }}</div>
+<div>{{ letter.greeting }}</div>
+<div>{{ letter.content }}</div>
+<div>{{ letter.signature }}</div>
+<form action="" method="post">
+    <input type="text" hidden name="letter_id" value="{{ letter.id }}">
+    <button name="status" value="approved" type="submit">Approuver</button>
+    <button name="status" value="rejected" type="submit">Refuser</button>
+</form>
+{% else %}
+<div>Aucune lettre à modérer</div>
+{% endif %}
+{% endblock %}
