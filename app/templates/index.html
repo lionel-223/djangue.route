@@ -29,10 +29,10 @@
 </div>
 {% if current_user and current_user.recipients|length > 0 %}
 <div>
-	<p>Vos établissements :</p>
+	<p>Vos établissements (cliquez pour modifier les informations):</p>
 	<ul>
 	{% for recipient in current_user.recipients %}
-		<li>{{ recipient }}</li>
+		<li><a href="{{ url_for('main.edit_recipient', recipient_id=recipient.id) }}">{{ recipient }}</a></li>
 	{% endfor %}
 	</ul>
 </div>
