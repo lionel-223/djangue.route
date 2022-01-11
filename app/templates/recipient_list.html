@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Liste des établissements partenaires</h2>
+    {% for recipient in recipients %}
+    <li>{{ recipient.type }} : {{ recipient.name }}</li>
+    {% endfor %}
+{% endblock %}
