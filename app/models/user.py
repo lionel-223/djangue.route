@@ -18,6 +18,7 @@ class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     password_hash = sa.Column(sa.String(128))
     can_moderate = sa.Column(sa.Boolean, default=False)
     can_see_stats = sa.Column(sa.Boolean, default=False)
+    can_edit_recipients = sa.Column(sa.Boolean, default=False)
 
     recipients = orm.relationship("Recipient", secondary=users_recipients, backref="users")
 
@@ -30,5 +31,5 @@ class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     @property
     def admin_accesses(self):
         return {
-            key: getattr(self, key) for key in ('can_moderate', 'can_see_stats')
+            key: getattr(self, key) for key in ('can_moderate', 'can_see_stats', 'can_edit_recipients')
         }

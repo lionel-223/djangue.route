@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if recipient %}
+    <h2>Modifier les informations de {{ recipient.name }}</h2>
+    {% else %}
 	<h2>Inscrire mon établissement ou mon association pour recevoir des lettres.</h2>
+    {% endif %}
     {% if current_user.is_anonymous %}
     <div>
         Si vous avez déjà un compte utilisateur, merci de vous connecter
