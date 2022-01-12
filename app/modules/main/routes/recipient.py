@@ -39,8 +39,8 @@ def register_recipient():
     return redirect(url_for('main.index'))
 
 
-@login_required
 @bp.route('/recipients/edit/<int:recipient_id>', methods=['GET', 'POST'])
+@login_required
 def edit_recipient(recipient_id):
     recipient = db.session.query(Recipient).filter_by(id=recipient_id).first()
     if not recipient:
