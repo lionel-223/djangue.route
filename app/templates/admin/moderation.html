@@ -10,11 +10,12 @@
 <div>{{ letter.greeting }}</div>
 <div>{{ letter.content }}</div>
 <div>{{ letter.signature }}</div>
-<form action="" method="post">
+<form id="moderation_form" action="" method="post">
     <input type="text" hidden name="letter_id" value="{{ letter.id }}">
     <button name="status" value="approved" type="submit">Approuver</button>
     <button name="status" value="rejected" type="submit">Refuser</button>
 </form>
+    <a href="{{ url_for('main.index') }}">lien</a>
 {% else %}
 <div>Aucune lettre à modérer</div>
 {% endif %}

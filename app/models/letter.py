@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import enum
 
 import sqlalchemy as sa
@@ -30,6 +31,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     greeting_key = sa.Column(sa.ForeignKey('greetings.key'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
+    moderation_time = sa.Column(sa.DateTime)
 
     language = orm.relationship('Language', backref='letters')
     greeting = orm.relationship('Greeting', backref='letters')
@@ -37,3 +39,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     specific_recipient = orm.relationship(
         'Recipient', backref='specific_letters'
     )
+
+    @property
+    def is_currently_reviewed(self):
+        return self.status == "not_moderated" and self.moderation_time > datetime.utcnow() - timedelta(hours=1)

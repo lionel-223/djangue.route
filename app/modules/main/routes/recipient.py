@@ -35,7 +35,7 @@ def register_recipient():
     recipient.users.append(current_user)
     db.session.add(recipient)
     db.session.commit()
-    flash('Inscription réussie!')
+    flash('Inscription réussie !')
     return redirect(url_for('main.index'))
 
 
