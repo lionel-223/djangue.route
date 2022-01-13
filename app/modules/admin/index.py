@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from flask import render_template, request, flash
+from flask_login import current_user
 
 
 from app import db
@@ -11,6 +12,9 @@ from . import bp
 def index():
     today = datetime.utcnow()
     week_start = today - timedelta(days=today.weekday(), hours=today.hour, minutes=today.minute, seconds=today.second)
+    user_moderation_count = len(current_user.moderated_letters)
+    user_accepted_count = db.session.query(Letter).filter_by(moderator=current_user,
+                                                             status=Letter.Status.approved).count()
     stats = {
         'letters_count': db.session.query(Letter).count(),
         'letters_week_count': (
@@ -28,6 +32,12 @@ def index():
         ).count(),
         'ehpad_count': db.session.query(Recipient).filter_by(type=Recipient.Types.retirement_home).count(),
         'associations_count': db.session.query(Recipient).filter_by(type=Recipient.Types.association).count(),
+        'user_moderation_count': user_moderation_count,
+        'user_moderation_week_count':
+            db.session.query(Letter).filter((Letter.moderator == current_user)
+                                            & (Letter.moderation_time >= week_start)).count(),
+        'user_pct_accepted':
+            round(100 * user_accepted_count / user_moderation_count),
     }
     return render_template('admin/dashboard.html', stats=stats)
 
@@ -53,6 +63,7 @@ def moderation():
     )
     if new_letter:
         new_letter.moderation_time = datetime.utcnow()
+        new_letter.moderator = current_user
         db.session.commit()
     return render_template('admin/moderation.html', letter=new_letter)
 
@@ -65,5 +76,6 @@ def unlock_letter(letter_id):
     """
     letter = db.session.get(Letter, letter_id)
     letter.moderation_time = None
+    letter.moderator = None
     db.session.commit()
     return True, 200

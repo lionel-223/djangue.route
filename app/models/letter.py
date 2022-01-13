@@ -24,7 +24,6 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     event = sa.Column(sa.String)
     content = sa.Column(sa.String, nullable=False)
     signature = sa.Column(sa.String, nullable=False)
-    upload_id = sa.Column(sa.ForeignKey('users.id'))
     allow_reuse = sa.Column(sa.Boolean, nullable=False)
     specific_recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
@@ -32,6 +31,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
     moderation_time = sa.Column(sa.DateTime)
+    moderator_id = sa.Column(sa.ForeignKey('users.id'))
 
     language = orm.relationship('Language', backref='letters')
     greeting = orm.relationship('Greeting', backref='letters')
@@ -39,6 +39,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     specific_recipient = orm.relationship(
         'Recipient', backref='specific_letters'
     )
+    moderator = orm.relationship('User', backref='moderated_letters')
 
     @property
     def is_currently_reviewed(self):
