@@ -9,22 +9,46 @@
 			<ul class="collection">
 				<li class="collection-item">
 					<div>
-						<span class="title">Toutes :</span>
+						<span class="title">Total reçu depuis le début :</span>
 						<span class="secondary-content locale-number">{{ stats.letters_count }}</span>
 					</div>
 				</li>
 				<li class="collection-item">
 					<div>
-						<span class="title">Cette semaine :</span>
+						<span class="title">Reçues cette semaine :</span>
 						<span class="secondary-content locale-number">{{ stats.letters_week_count }}</span>
 					</div>
 				</li>
 				<li class="collection-item">
 					<div>
-						<span class="title">Non modéré :</span>
+						<span class="title">Modérées cette semaine :</span>
+						<span class="secondary-content locale-number">{{ stats.letters_moderated_week_count }}</span>
+					</div>
+				</li>
+				<li class="collection-item">
+					<div>
+						<span class="title">Non modérées :</span>
 						<span class="secondary-content locale-number">{{ stats.letters_unmoderated_count }}</span>
 					</div>
 				</li>
+			</ul>
+		</div>
+		<div class="col s6">
+			<h2>Etablissements</h2>
+			<ul class="collection">
+				<li class="collection-item">
+					<div>
+						<span class="title">EHPAD inscrits :</span>
+						<span class="secondary-content locale-number">{{ stats.ehpad_count }}</span>
+					</div>
+				</li>
+				<li class="collection-item">
+					<div>
+						<span class="title">Associations inscrites :</span>
+						<span class="secondary-content locale-number">{{ stats.associations_count }}</span>
+					</div>
+				</li>
+
 			</ul>
 		</div>
 	</div>

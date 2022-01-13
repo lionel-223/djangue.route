@@ -17,10 +17,17 @@ def index():
             db.session.query(Letter)
             .filter(Letter.created_at >= week_start)
         ).count(),
+        'letters_moderated_week_count': (
+            db.session.query(Letter)
+            .filter((Letter.moderation_time >= week_start) &
+                    (Letter.status.in_([Letter.Status.approved, Letter.Status.rejected])))
+        ).count(),
         'letters_unmoderated_count': (
             db.session.query(Letter)
             .filter(Letter.status == Letter.Status.not_moderated)
         ).count(),
+        'ehpad_count': db.session.query(Recipient).filter_by(type=Recipient.Types.retirement_home).count(),
+        'associations_count': db.session.query(Recipient).filter_by(type=Recipient.Types.association).count(),
     }
     return render_template('admin/dashboard.html', stats=stats)
 
