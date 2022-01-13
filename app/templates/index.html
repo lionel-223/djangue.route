@@ -13,6 +13,7 @@
     <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
     {% if current_user.can_moderate %}
         <li><a href="{{ url_for('admin.moderation') }}">Modérer des lettres</a></li>
+        <li><a href="{{ url_for('admin.moderation_recipient') }}">Modérer des établissements</a></li>
     {% endif %}
     {% if current_user.can_see_stats %}
         <li><a href="{{ url_for('admin.index') }}">Dashboard admin</a></li>

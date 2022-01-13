@@ -3,7 +3,7 @@ from flask import render_template, request, flash
 
 
 from app import db
-from app.models import Letter
+from app.models import Letter, Recipient
 from . import bp
 
 
@@ -60,3 +60,20 @@ def unlock_letter(letter_id):
     letter.moderation_time = None
     db.session.commit()
     return True, 200
+
+
+@bp.route('/moderation-recipient/', methods=['GET', 'POST'])
+def moderation_recipient():
+    new_status = request.form.get('status', None)
+    recipient_id = request.form.get('recipient_id', None)
+    if new_status and recipient_id:
+        new_status = Recipient.Status[new_status]
+        recipient = db.session.query(Recipient).get(recipient_id)
+        if recipient.status != Recipient.Status.not_moderated:
+            flash('Oups ! Cet établissement avait déjà été modéré...')
+        else:
+            recipient.status = new_status
+            db.session.commit()
+    new_recipient = db.session.query(Recipient).filter(Recipient.status == Recipient.Status.not_moderated)\
+        .order_by(Recipient.created_at).first()
+    return render_template('admin/moderation_recipient.html', recipient=new_recipient)

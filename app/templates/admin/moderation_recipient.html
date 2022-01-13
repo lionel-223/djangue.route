@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<h2>Modération des établissements partenaires</h2>
+
+{% if recipient %}
+<div>{{ recipient.created_at }}</div>
+<div>{{ recipient.name }} ({{ recipient.type }})</div>
+<div>{{ recipient.address }}, {{ recipient.zipcode }} {{ recipient.city }}</div>
+<form action="" method="post">
+    <input type="text" hidden name="recipient_id" value="{{ recipient.id }}">
+    <button name="status" value="approved" type="submit">Approuver</button>
+    <button name="status" value="rejected" type="submit">Refuser</button>
+</form>
+{% else %}
+<div>Aucun établissement à modérer</div><br>
+<a href="{{ url_for('main.index') }}">Revenir à la page d'accueil</a>
+{% endif %}
+{% endblock %}
