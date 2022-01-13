@@ -23,12 +23,25 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
                 self.association: 'Association',
             }.get(self, self.name)
 
+    class Status(enum.Enum):
+        not_moderated = enum.auto()
+        approved = enum.auto()
+        rejected = enum.auto()
+
+        def __str__(self):
+            return {
+                self.not_moderated: 'A modérer',
+                self.approved: 'Approuvé',
+                self.rejected: 'Refusé',
+            }.get(self, self.name)
+
     email = sa.Column(sa.String)
     name = sa.Column(sa.String)
     receives_letters = sa.Column(sa.Boolean)
     nb_letters = sa.Column(sa.Integer)
     frequency = sa.Column(sa.Integer)  # Nb of months between each letters pack sent
     type = sa.Column(sa.Enum(Types, native_enum=False))
+    status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
 
     languages = orm.relationship("Language", secondary=recipients_languages)
 
