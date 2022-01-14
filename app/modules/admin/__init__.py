@@ -13,4 +13,4 @@ def before_request():
         return "no admin access"
 
 
-from . import index
+from . import index, moderation
