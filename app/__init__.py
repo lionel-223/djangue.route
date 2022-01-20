@@ -3,11 +3,13 @@ import json
 from pathlib import Path
 from flask import Blueprint, Flask as BaseFlask, request
 from flask.json import JSONEncoder
+from flask_assets import Environment
 from flask_babel import Babel
 from flask_login import LoginManager
 
 from app import config
 
+assets = Environment()
 babel = Babel()
 APP_FOLDER = Path(__file__).parent
 MODULES_FOLDER = APP_FOLDER / 'modules'
@@ -55,6 +57,7 @@ def create_app():
 
     app = Flask()
     app.config['SECRET_KEY'] = config.SECRET_KEY
+    assets.init_app(app)
     babel.init_app(app)
     for module in MODULES_FOLDER.glob('./*/'):
         module = importlib.import_module(f'.{module.stem}', 'app.modules')

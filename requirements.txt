@@ -7,6 +7,8 @@ Flask-Babel
 Flask-WTF
 flask-login
 email-validator
+Flask-Assets
+cssmin
 
 # db / ORM
 SQLAlchemy
