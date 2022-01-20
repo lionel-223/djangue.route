@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if data %}
+    <h2>Récapitulatif de votre demande</h2>
+    <div><b>Vote nom : </b>{{ data["name"] }}</div>
+    <div><b>Votre email : </b>{{ data["email"] }}</div>
+    <div><b>Votre message : </b>{{ data["message"] }}</div>
+    {% else %}
+    <h2>Nous contacter</h2>
+	{% include "_form.html" %}
+    <p>
+        Attention, votre message doit concerner toutes interrogations ou commentaires à destination de l'équipe.
+        Pour écrire une lettre, rendez-vous sur la <a href="{{ url_for('main.write') }}" class="button">page dédiée</a>
+    </p>
+    {% endif %}
+{% endblock %}
