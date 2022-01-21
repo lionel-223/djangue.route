@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, BooleanField
-from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms.validators import DataRequired, Email, Length, Optional, InputRequired
 
 from app import db, get_locale
 from app.models import Greeting, Language, Recipient, Country
@@ -9,6 +9,7 @@ from app.models import Greeting, Language, Recipient, Country
 
 class LetterForm(FlaskForm):
     language_code = SelectField("Langue", validators=[DataRequired()], default=get_locale)
+    is_male = SelectField("Tu souhaites écrire à...", validators=[InputRequired()], coerce=lambda x: bool(int(x)))
     greeting_key = SelectField("Salutation", validators=[DataRequired()])
     content = TextAreaField("Contenu", validators=[DataRequired(), Length(min=120)])
     signature = StringField("Signature", validators=[DataRequired()])
@@ -24,6 +25,10 @@ class LetterForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.is_male.choices = [
+            ("1", "Un homme"),
+            ("0", "Une femme"),
+        ]
         self.greeting_key.choices = [
             (greeting.key, str(greeting)) for greeting in db.session.query(Greeting)
         ]
