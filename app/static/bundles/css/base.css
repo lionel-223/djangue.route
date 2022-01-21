@@ -1,0 +1,85 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Poppins', sans-serif;
+	color: var(--body-fg);
+	background: var(--body-bg);
+	line-height: 1.6;
+	margin: 0;
+}
+
+img {
+	max-height: 100%;
+	max-width: 100%;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+ul li {
+	margin: 0;
+}
+
+a, a:visited {
+	text-decoration: none;
+	color: var(--yellow);
+}
+
+a:hover {
+	color: var(--yellow-darker);
+	text-decoration: underline;
+}
+
+
+.container {
+	max-width: var(--page-width);
+	width: calc(100% - 2rem);
+	margin: auto;
+}
+
+.grid {
+	display: grid;
+	align-content: center;
+	gap: 1.5rem;
+}
+
+.grid.cells {
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	row-gap: 2rem;
+}
+
+a, .clickable {
+	cursor: pointer;
+}
+
+.button {
+	display: inline-block;
+	text-align: center;
+	padding: .75rem 1rem;
+	background: var(--yellow);
+	transition: .4s;
+	border-radius: .5rem;
+}
+
+.button:hover {
+	background: var(--yellow-darker);
+}
+
+.button, .button:hover, .button:visited {
+	color: var(--body-bg);
+	text-decoration: none;
+}
+
+.title {
+	font-size: 140%;
+}
+
+h1, h2, h3, h4, .title {
+	color: var(--title-color);
+	font-weight: 600;
+}

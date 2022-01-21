@@ -3,4 +3,6 @@
 __pycache__/
 .webassets-cache/
 
+/app/static/bundle.*
+
 *.mo

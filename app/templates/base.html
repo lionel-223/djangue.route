@@ -9,9 +9,7 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    {% assets filters='cssmin', output='static/bundle.css',
-			'styles/main.css'
-		%}
+    {% assets "css" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}">
 		{% endassets %}
 		{% block head %}{% endblock %}
@@ -44,16 +42,15 @@
 			<i class="bx bx-chevron-up icon"></i>
 		</a>
 
-		<div>
+		<div id="flash-messages">
 			{% for message in get_flashed_messages() %}
 			<span style="color: red;">{{ message }}</span>
 			{% endfor %}
 		</div>
 		{% block content %}{% endblock %}
-		<script src="{{ url_for('static', filename='script.js') }}"></script>
 		{% block footer %}
 		<footer id="footer" class="container">
-			<div class="sections">
+			<div class="sections grid cells">
 				<section>
 					<a href="{{ url_for('main.index') }}" class="title">1 Lettre 1 Sourire</a>
 					<span class="description">Non Profit</span>
@@ -90,7 +87,14 @@
 					</ul>
 				</section>
 			</div>
+			<p class="copyright">
+				&copy; 1 Lettre 1 Sourire. Tous droits réservés.
+			</p>
 		</footer>
 		{% endblock %}
+
+		{% assets "js" %}
+		<script src="{{ ASSET_URL }}" defer></script>
+		{% endassets %}
 	</body>
 </html>
