@@ -2,13 +2,48 @@
 <html lang="fr">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>1 Lettre 1 Sourire</title>
-		<link rel="icon" href="{{ url_for('static', filename='logo/logo-150x.png') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='logo/logo-150x.png') }}">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    {% assets filters='cssmin', output='static/bundle.css',
+			'styles/main.css'
+		%}
+		<link rel="stylesheet" href="{{ ASSET_URL }}">
+		{% endassets %}
 		{% block head %}{% endblock %}
 	</head>
 
 	<body>
-		<h1>1 Lettre 1 Sourire</h1>
+
+		<header id="header">
+			<nav class="container" id="nav">
+				<a href="{{ url_for('main.index') }}" class="logo">
+					<img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
+					<span class="title">1 Lettre 1 Sourire</span>
+				</a>
+
+				<div id="nav-menu">
+					<ul id="nav-list">
+						<li><a href="{{ url_for('main.write') }}">Écrire une lettre</a></li>
+						<li><a href="{{ url_for('main.login') }}">Recevoir des lettres</a></li>
+						<li><a href="{{ url_for('main.index') }}">À propos</a></li>
+						<li><a href="{{ url_for('main.index') }}">Contact</a></li>
+					</ul>
+				</div>
+				<div id="nav-toggle" class="clickable">
+					<i class="bx bx-menu"></i>
+				</div>
+			</nav>
+		</header>
+
+		<a href="#" id="scroll-top" class="button">
+			<i class="bx bx-chevron-up icon"></i>
+		</a>
+
 		<div>
 			{% for message in get_flashed_messages() %}
 			<span style="color: red;">{{ message }}</span>
@@ -16,6 +51,46 @@
 		</div>
 		{% block content %}{% endblock %}
 		<script src="{{ url_for('static', filename='script.js') }}"></script>
-		{% block footer %}{% endblock %}
+		{% block footer %}
+		<footer id="footer" class="container">
+			<div class="sections">
+				<section>
+					<a href="{{ url_for('main.index') }}" class="title">1 Lettre 1 Sourire</a>
+					<span class="description">Non Profit</span>
+					<div class="socials">
+						<a><i class="bx bxl-facebook"></i></a>
+						<a><i class="bx bxl-instagram"></i></a>
+						<a><i class="bx bxl-twitter"></i></a>
+					</div>
+				</section>
+				<section>
+					<span class="title">Services</span>
+					<ul>
+						<li><a href="{{ url_for('main.write') }}">Écrire une lettre</a></li>
+						<li><a href="{{ url_for('main.index') }}">À propos</a></li>
+						<li><a href="{{ url_for('main.index') }}">FAQs</a></li>
+						<li><a href="{{ url_for('main.index') }}">Nos partenaires</a></li>
+					</ul>
+				</section>
+				<section>
+					<span class="title">Informations</span>
+					<ul>
+						<li><a href="{{ url_for('main.login') }}">Espace membre</a></li>
+						<li><a href="{{ url_for('main.index') }}">Faire un don</a></li>
+						<li><a href="{{ url_for('main.index') }}">Politique de confidentialité</a></li>
+						<li><a href="{{ url_for('main.index') }}">Conditions d'utilisation</a></li>
+					</ul>
+				</section>
+				<section>
+					<span class="title">Addresse</span>
+					<ul>
+						<li>France</li>
+						<li>+33 6 46 48 08 02</li>
+						<li>contact@1lettre1sourire.org</li>
+					</ul>
+				</section>
+			</div>
+		</footer>
+		{% endblock %}
 	</body>
 </html>
