@@ -22,6 +22,8 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
 
     email = sa.Column(sa.String, nullable=False)
     event = sa.Column(sa.String)
+    is_male = sa.Column(sa.Boolean, nullable=False, server_default="1")
+    is_young = sa.Column(sa.Boolean)
     content = sa.Column(sa.String, nullable=False)
     signature = sa.Column(sa.String, nullable=False)
     allow_reuse = sa.Column(sa.Boolean, nullable=False)

@@ -5,28 +5,29 @@ from app.models import Letter
 from .. import bp, LetterForm
 
 
-@bp.route('/write/', methods=['GET', 'POST'])
-@bp.route('/write/<event>', methods=['GET', 'POST'])
-def write(event=None):
+@bp.route('/write-young/', methods=['GET', 'POST'])
+@bp.route('/write-young/<event>', methods=['GET', 'POST'])
+def write_young(event=None):
     form = LetterForm()
+    del form.specific_recipient_id
     if not form.validate_on_submit():
-        return render_template('write.html', form=form)
+        return render_template('write_young.html', form=form)
 
     letter = Letter(
         event=event,
         language_code=form.language_code.data,
         is_male=form.is_male.data,
-        is_young=False,
+        is_young=True,
         greeting_key=form.greeting_key.data,
         content=form.content.data,
         signature=form.signature.data,
         email=form.email.data,
         country_code=form.country_code.data,
         zipcode=form.zipcode.data,
-        specific_recipient_id=form.specific_recipient_id.data or None,
+        specific_recipient_id=None,
         allow_reuse=form.allow_reuse.data
     )
     db.session.add(letter)
     db.session.commit()
-    flash('Ta lettre a été enregistrée, elle sera envoyée prochainement.')
+    flash('Ta lettre a été enregistrée ! Elle sera distribuée prochainement au sein des établissements scolaires.')
     return redirect(url_for('main.index'))
