@@ -10,7 +10,7 @@ from app.models import Greeting, Language, Recipient, Country
 class LetterForm(FlaskForm):
     language_code = SelectField("Langue", validators=[DataRequired()], default=get_locale)
     is_male = SelectField("Tu souhaites écrire à...", validators=[InputRequired()], coerce=lambda x: bool(int(x)))
-    greeting_key = SelectField("Salutation", validators=[DataRequired()])
+    greeting = StringField("Salutation", validators=[DataRequired()])
     content = TextAreaField("Contenu", validators=[DataRequired(), Length(min=120)])
     signature = StringField("Signature", validators=[DataRequired()])
     upload = FileField("Photo", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
@@ -28,9 +28,6 @@ class LetterForm(FlaskForm):
         self.is_male.choices = [
             ("1", "Un homme"),
             ("0", "Une femme"),
-        ]
-        self.greeting_key.choices = [
-            (greeting.key, str(greeting)) for greeting in db.session.query(Greeting)
         ]
         self.language_code.choices = [
             (language.code, str(language)) for language in
