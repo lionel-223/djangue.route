@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField, SelectField, TextAreaField, Boolea
 from wtforms.validators import DataRequired, Email, Length, Optional, InputRequired
 
 from app import db, get_locale
-from app.models import Greeting, Language, Recipient, Country
+from app.models import Language, Recipient, Country
 
 
 class LetterForm(FlaskForm):

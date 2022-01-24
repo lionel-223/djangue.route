@@ -91,6 +91,6 @@ def create_app():
 
 
 def init_static_data():
-    for script in ('import_countries_and_langs', 'create_default_greetings'):
+    for script in ['import_countries_and_langs']:
         module = importlib.import_module(f'scripts.{script}')
         module.main()
