@@ -22,19 +22,19 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
 
     email = sa.Column(sa.String, nullable=False)
     event = sa.Column(sa.String)
+    is_male = sa.Column(sa.Boolean, nullable=False, server_default="1")
+    is_young = sa.Column(sa.Boolean)
     content = sa.Column(sa.String, nullable=False)
     signature = sa.Column(sa.String, nullable=False)
     allow_reuse = sa.Column(sa.Boolean, nullable=False)
     specific_recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
-    greeting_key = sa.Column(sa.ForeignKey('greetings.key'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
     moderation_time = sa.Column(sa.DateTime)
     moderator_id = sa.Column(sa.ForeignKey('users.id'))
 
     language = orm.relationship('Language', backref='letters')
-    greeting = orm.relationship('Greeting', backref='letters')
     upload = orm.relationship('Upload', backref='letters')
     specific_recipient = orm.relationship(
         'Recipient', backref='specific_letters'

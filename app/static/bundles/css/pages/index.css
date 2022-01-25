@@ -1,0 +1,36 @@
+#landing .home {
+	background: var(--blue);
+	text-align: center;
+}
+
+#landing .home .image {
+	width: 800px;
+}
+
+#landing .home .grid, #landing #about .grid {
+	min-height: calc(100vh - var(--header-height-total));
+	grid-template-columns: repeat(2,1fr);
+	align-items: center;
+	justify-items: center;
+}
+
+#landing .home .text {
+	font-size: 1.3rem;
+}
+
+#landing .title {
+	font-size: 200%;
+}
+
+#landing #about .image {
+	width: 300px;
+	border-radius: 1rem;
+}
+
+#landing #how-it-works {
+	text-align: center;
+}
+
+#landing #how-it-works h3 {
+	margin-top: .25rem;
+}

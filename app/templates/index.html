@@ -1,48 +1,67 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<main id="landing">
+	<section class="home">
+		<div class="container grid">
+			<div class="text">
+				<img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
+				<h2 class="title">De l'amour en quelques clics</h2>
+				<p>Écrire des lettres aux personnes âgées isolées</p>
+				<p>
+					<a class="button" href="{{ url_for('main.write') }}">Écrire une lettre</a>
+				</p>
+			</div>
+			<img class="image" src="{{ url_for('static', filename='assets/art/read_letter_male.gif') }}">
+		</div>
+	</section>
 
-{% if current_user.is_anonymous %}
-<ul>
-    <li><a href="{{ url_for('main.login') }}">Connexion</a></li>
-    <li><a href="{{ url_for('main.register') }}">Inscription</a></li>
-</ul>
-{% else %}
-<h3>Bienvenue, {{ current_user.email }}</h3>
-<ul>
-    <li><a href="{{ url_for('main.logout') }}">Déconnexion</a></li>
-    {% if current_user.can_moderate %}
-        <li><a href="{{ url_for('admin.moderation') }}">Modérer des lettres</a></li>
-        <li><a href="{{ url_for('admin.moderation_recipient') }}">Modérer des établissements</a></li>
-    {% endif %}
-    {% if current_user.can_see_stats %}
-        <li><a href="{{ url_for('admin.index') }}">Dashboard admin</a></li>
-    {% endif %}
-</ul>
-{% endif %}
+	<section id="about">
+		<div class="container grid">
+			<img class="image" src="{{ url_for('static', filename='assets/stock/closeup_smiling_female.jpg') }}">
+			<div class="text">
+				<p class="subtitle">Qui sommes nous ?</p>
+				<h2 class="title">
+					Nous combattons une pandémie de la solitude
+				</h2>
+				<p>
+					Nous somme une organisation à but non lucratif qui fait parvenir des
+					lettres aux personnes âgées isolées. Nous aidons ceux qui souffrent de
+					l'isolement avec de l'amour et des lettres.
+				</p>
+				<p>
+					<a href="{{ url_for('main.index') }}" class="button">En savoir plus</a>
+				</p>
+			</div>
+		</div>
+	</section>
 
-<div>
-	<a href="{{ url_for('main.write') }}" class="button">Écrivez une lettre</a>
-</div>
-<div>
-	Vous représentez un EHPAD ou une association et vous souhaitez recevoir des lettres?
-    <a href="{{ url_for('main.register_recipient') }}" class="button">Inscrivez votre établissement ou association</a>
-</div>
-{% if current_user and current_user.recipients|length > 0 %}
-<div>
-	<p>Vos établissements (cliquez pour modifier les informations):</p>
-	<ul>
-	{% for recipient in current_user.recipients %}
-		<li><a href="{{ url_for('main.edit_recipient', recipient_id=recipient.id) }}">{{ recipient }}</a></li>
-	{% endfor %}
-	</ul>
-</div>
-{% endif %}
-<div>
-    <a href="{{ url_for('main.recipient_list') }}" class="button">Qui reçoit vos lettres</a>
-</div>
-<div>
-    <a href="{{ url_for('main.contact') }}" class="button">Nous contacter</a>
-</div>
+	<section id="how-it-works">
+		<div class="container">
+			<p class="subtitle">Fonctionnement</p>
+			<h2 class="title">Comment ça marche</h2>
+			<div class="container grid cells">
+				<div>
+					<img src="{{ url_for('static', filename='assets/icons/writing.svg') }}">
+					<h3>Écriture</h3>
+					<p>lorem</p>
+				</div>
+				<div>
+					<img src="{{ url_for('static', filename='assets/icons/verified.svg') }}">
+					<h3>Relecture</h3>
+					<p>lorem</p>
+				</div>
+				<div>
+					<img src="{{ url_for('static', filename='assets/icons/mail.svg') }}">
+					<h3>Envoi</h3>
+					<p>lorem</p>
+				</div>
+			</div>
+			<p>
+				<a href="{{ url_for('main.write') }}" class="button">Écrire une lettre</a>
+			</p>
+		</div>
+	</section>
 
+</main>
 {% endblock %}

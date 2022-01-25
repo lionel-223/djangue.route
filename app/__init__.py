@@ -3,11 +3,13 @@ import json
 from pathlib import Path
 from flask import Blueprint, Flask as BaseFlask, request
 from flask.json import JSONEncoder
+from flask_assets import Environment, Bundle
 from flask_babel import Babel
 from flask_login import LoginManager
 
 from app import config
 
+assets = Environment()
 babel = Babel()
 APP_FOLDER = Path(__file__).parent
 MODULES_FOLDER = APP_FOLDER / 'modules'
@@ -49,12 +51,27 @@ class Blueprint(Blueprint):
         super().__init__(name, module, url_prefix=prefix)
 
 
+def register_assets(assets):
+    bundles_dir = APP_FOLDER / 'static' / 'bundles'
+    for bundle_dir in bundles_dir.glob('*/'):
+        file_type = bundle_dir.stem
+        bundle_name = f'bundle.{file_type}'
+        bundle = Bundle(
+            *[str(x) for x in bundle_dir.glob(f'**/*.{file_type}')],
+            output=bundle_name,
+            filters={'css': 'cssmin'}.get(file_type),
+        )
+        assets.register(file_type, bundle)
+
+
 def create_app():
     from app import db
     from app.models import User
 
     app = Flask()
     app.config['SECRET_KEY'] = config.SECRET_KEY
+    register_assets(assets)
+    assets.init_app(app)
     babel.init_app(app)
     for module in MODULES_FOLDER.glob('./*/'):
         module = importlib.import_module(f'.{module.stem}', 'app.modules')
@@ -74,6 +91,6 @@ def create_app():
 
 
 def init_static_data():
-    for script in ('import_countries_and_langs', 'create_default_greetings'):
+    for script in ['import_countries_and_langs']:
         module = importlib.import_module(f'scripts.{script}')
         module.main()

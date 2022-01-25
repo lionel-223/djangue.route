@@ -1,0 +1,20 @@
+:root {
+	--page-width: 960px;
+
+	--blue: #BBDEFB;
+	--yellow: #F9D564;
+	--yellow-darker: #ECBD22;
+
+	--z-tooltip: 10;
+	--z-fixed: 100;
+
+	--body-bg: #FFFFFF;
+	--body-fg: #707070;
+	--body-fg-light: #A6A6A6;
+	--title-color: #393939;
+
+
+	--header-height: 3.5rem;
+	--header-padding: 1rem;
+	--header-height-total: 5.5rem;
+}
