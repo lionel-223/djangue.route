@@ -1,9 +1,10 @@
+from datetime import datetime
 import enum
 import sqlalchemy as sa
 from sqlalchemy import orm
 
 from app import db
-
+from .package import Package
 
 recipients_languages = sa.Table(
     'recipients_languages', db.Base.metadata,
@@ -47,3 +48,19 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
 
     def __str__(self):
         return f'{self.name} ({self.type})'
+
+    @property
+    def received_letters(self):
+        return [letter.id for package in self.packages for letter in package]
+
+    @property
+    def needs_new_package(self):
+        last_package = (
+            db.session.query(Package).filter_by(recipient_id=self.id).order_by(Package.created_at.desc()).first()
+        )
+        if not last_package:
+            return True
+        this_month = datetime.utcnow().month
+        return this_month - self.frequency >= last_package.created_at.month
+
+
