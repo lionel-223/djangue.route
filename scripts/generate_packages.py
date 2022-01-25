@@ -1,6 +1,6 @@
 import tempfile
 import subprocess
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from sqlalchemy.sql.expression import func
 
@@ -53,7 +53,6 @@ def letter_to_html(letter, template_path, logo_path):
         html = f.read()
 
     html = html.replace("{{ logo_path }}", logo_path)
-    html = html.replace("{{ letter.greeting }}", str(letter.greeting))
     html = html.replace("{{ letter.content }}", letter.content)
     html = html.replace("{{ letter.signature }}", letter.signature)
     return html
