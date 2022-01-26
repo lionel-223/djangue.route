@@ -17,4 +17,16 @@
 	--header-height: 3.5rem;
 	--header-padding: 1rem;
 	--header-height-total: 5.5rem;
+
+	--text-size-xxl: 200%;
+	--center-on-mobile: default;
+	--two-line-on-mobile: default;
+}
+
+@media screen and (max-width: 768px) {
+	:root {
+		--text-size-xxl: 130%;
+		--center-on-mobile: center;
+		--two-line-on-mobile: 2rem;
+	}
 }

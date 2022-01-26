@@ -47,8 +47,8 @@ a:hover {
 	align-content: center;
 	gap: 1.5rem;
 	align-items: center;
-	justify-items: center;
 	justify-content: center;
+	text-align: var(--center-on-mobile);
 }
 
 .grid.cells {

@@ -12,12 +12,16 @@
 }
 
 #landing .title {
-	font-size: 200%;
+	font-size: var(--text-size-xxl);
 }
 
 #landing #about .image {
 	width: 300px;
 	border-radius: 1rem;
+}
+
+#landing #how-it-works .grid {
+	padding: var(--two-line-on-mobile);
 }
 
 #landing #how-it-works, #landing #participate, #landing #gallery {
@@ -30,6 +34,7 @@
 
 #landing #participate .grid {
 	column-gap: 6rem;
+	justify-items: center;
 }
 
 #landing #participate .card {
@@ -56,6 +61,7 @@
 }
 
 #landing section {
+	padding-top: var(--two-line-on-mobile);
 	margin-bottom: 8rem;
 }
 
