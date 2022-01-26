@@ -30,6 +30,20 @@
 						<li><a href="{{ url_for('main.login') }}">Recevoir des lettres</a></li>
 						<li><a href="{{ url_for('main.index') }}">À propos</a></li>
 						<li><a href="{{ url_for('main.index') }}">Contact</a></li>
+						<li class="socials">
+							<a>
+								<i class="bx bxl-facebook"></i>
+							</a>
+							<a>
+								<i class="bx bxl-instagram"></i>
+							</a>
+							<a>
+								<i class="bx bxl-linkedin"></i>
+							</a>
+							<a>
+								<i class="bx bxl-tiktok"></i>
+							</a>
+						</li>
 					</ul>
 				</div>
 				<div id="nav-toggle" class="clickable">
@@ -96,5 +110,7 @@
 		{% assets "js" %}
 		<script src="{{ ASSET_URL }}" defer></script>
 		{% endassets %}
+		{% block scripts %}
+		{% endblock %}
 	</body>
 </html>

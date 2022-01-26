@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <main id="landing">
-	<section class="home">
-		<div class="container grid">
+	<section id="home">
+		<div class="container grid cols full-height">
 			<div class="text">
 				<img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
 				<h2 class="title">De l'amour en quelques clics</h2>
@@ -17,7 +26,7 @@
 	</section>
 
 	<section id="about">
-		<div class="container grid">
+		<div class="container grid cols full-height">
 			<img class="image" src="{{ url_for('static', filename='assets/stock/closeup_smiling_female.jpg') }}">
 			<div class="text">
 				<p class="subtitle">Qui sommes nous ?</p>
@@ -44,22 +53,70 @@
 				<div>
 					<img src="{{ url_for('static', filename='assets/icons/writing.svg') }}">
 					<h3>Écriture</h3>
-					<p>lorem</p>
+					<p>Tu peux parler de ta vie quotidienne, d’une histoire, un voyage ou des mots d’encouragement</p>
 				</div>
 				<div>
 					<img src="{{ url_for('static', filename='assets/icons/verified.svg') }}">
 					<h3>Relecture</h3>
-					<p>lorem</p>
+					<p>Notre équipe de bénévoles relit les lettres pour empêcher tout abus de la plateforme</p>
 				</div>
 				<div>
 					<img src="{{ url_for('static', filename='assets/icons/mail.svg') }}">
 					<h3>Envoi</h3>
-					<p>lorem</p>
+					<p>Nous envoyons ta lettre à un de nos EHPAD partenaire ou celui de ton choix</p>
 				</div>
 			</div>
 			<p>
 				<a href="{{ url_for('main.write') }}" class="button">Écrire une lettre</a>
 			</p>
+		</div>
+	</section>
+
+	<section id="participate">
+		<div class="container">
+			<p class="subtitle">Choisir une option</p>
+			<h2 class="title">Je souhaite…</h2>
+			<div class="container grid cells">
+				<div class="card col">
+					<a class="image" href="{{ url_for('main.write') }}">
+						<img src="{{ url_for('static', filename='assets/art/write_letter_side_male.gif') }}">
+					</a>
+					<h3>Écrire une lettre</h3>
+					<p class="subtitle">Créer un sourire</p>
+					<a class="button" href="{{ url_for('main.write') }}"><i class="bx bxs-right-arrow-alt"></i></a>
+				</div>
+				<div class="card col">
+					<a class="image" href="{{ url_for('main.register') }}">
+						<img src="{{ url_for('static', filename='assets/art/read_letter_side_female.gif') }}">
+					</a>
+					<h3>Recevoir des lettres</h3>
+					<p>Je représente un EHPAD ou une association</p>
+					<a class="button" href="{{ url_for('main.register') }}"><i class="bx bxs-right-arrow-alt"></i></a>
+				</div>
+		</div>
+	</section>
+
+	<section id="gallery">
+		<h2 class="title">Nos coups de cœur</h2>
+		<div class="container" id="letters-carousel">
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter1.jpg') }}">
+			</div>
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter2_1.jpg') }}">
+			</div>
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter2_2.png') }}">
+			</div>
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter3.jpg') }}">
+			</div>
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter4_1.jpg') }}">
+			</div>
+			<div class="image">
+				<img src="{{ url_for('static', filename='assets/letters/letter4_2.png') }}">
+			</div>
 		</div>
 	</section>
 

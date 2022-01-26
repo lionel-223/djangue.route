@@ -40,6 +40,7 @@ def logout():
 def register():
     target = redirect(url_for('main.index'))
     if current_user.is_authenticated:
+        flash('Déjà connecté')
         return target
 
     form = RegistrationForm()

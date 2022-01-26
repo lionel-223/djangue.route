@@ -1,20 +1,13 @@
-#landing .home {
+#landing #home {
 	background: var(--blue);
 	text-align: center;
 }
 
-#landing .home .image {
+#landing #home .image {
 	width: 800px;
 }
 
-#landing .home .grid, #landing #about .grid {
-	min-height: calc(100vh - var(--header-height-total));
-	grid-template-columns: repeat(2,1fr);
-	align-items: center;
-	justify-items: center;
-}
-
-#landing .home .text {
+#landing #home .text {
 	font-size: 1.3rem;
 }
 
@@ -27,10 +20,52 @@
 	border-radius: 1rem;
 }
 
-#landing #how-it-works {
+#landing #how-it-works, #landing #participate, #landing #gallery {
 	text-align: center;
 }
 
 #landing #how-it-works h3 {
 	margin-top: .25rem;
+}
+
+#landing #participate .grid {
+	column-gap: 6rem;
+}
+
+#landing #participate .card {
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 2rem;
+	max-width: 250px;
+}
+
+#landing #participate .button {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	border-radius: 1rem 0 0 0;
+	padding: .3rem .8rem;
+}
+
+#landing #participate p {
+	margin: 0;
+}
+
+#landing #participate h3 {
+	margin-bottom: .2rem;
+}
+
+#landing section {
+	margin-bottom: 8rem;
+}
+
+#landing section .full-height {
+	margin-bottom: -8rem;
+}
+
+#landing #gallery .image {
+	max-height: min(90vh, 800px);
+	width: auto;
+	border: 1px solid black;
+	margin: 1rem;
 }
