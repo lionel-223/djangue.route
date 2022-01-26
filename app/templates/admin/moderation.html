@@ -2,6 +2,25 @@
 
 {% block content %}
 
+<!-- Attention, ce style est à reprendre et à retirer lorsqu'on s'occupera du front pour la suite,
+il permet juste de cliquer sur les bouton pour choisir le thème du coup de coeur ! -->
+<style>
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-theme-content {
+    display: none;
+}
+.dropdown-theme-content button {
+    text-decoration: none;
+    display: block;
+}
+.dropdown:hover .dropdown-theme-content {
+    display: block;
+}
+</style>
+
 <h2>Modération</h2>
 
 {% if letter %}
@@ -13,6 +32,15 @@
     <input type="text" hidden name="letter_id" value="{{ letter.id }}">
     <button name="status" value="approved" type="submit">Approuver</button>
     <button name="status" value="rejected" type="submit">Refuser</button>
+    <div class="dropdown">
+        <button class="button-cdc">Coup de coeur</button>
+        <div class="dropdown-theme-content">
+            <button name="theme" value="travel" type="submit">Voyage</button>
+            <button name="theme" value="funny" type="submit">Drôle</button>
+            <button name="theme" value="emotional" type="submit">Émouvant</button>
+            <button name="theme" value="other" type="submit">Autre</button>
+        </div>
+    </div>
 </form>
 {% else %}
 <div>Aucune lettre à modérer</div>

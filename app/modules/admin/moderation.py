@@ -11,6 +11,7 @@ from . import bp
 def moderation():
     new_status = request.form.get('status', None)
     letter_id = request.form.get('letter_id', None)
+    new_theme = request.form.get('theme', None)
     if letter_id and new_status:
         new_status = Letter.Status[new_status]
         letter = db.session.query(Letter).get(letter_id)
@@ -18,6 +19,16 @@ def moderation():
             flash('Oups ! Cette lettre avait déjà été modérée...')
         else:
             letter.status = new_status
+            letter.moderation_time = datetime.utcnow()
+            db.session.commit()
+    if letter_id and new_theme:
+        new_theme = Letter.Theme[new_theme]
+        letter = db.session.query(Letter).get(letter_id)
+        if letter.status != Letter.Status.not_moderated:
+            flash('Oups ! Cette lettre avait déjà été modérée...')
+        else:
+            letter.status = 'approved'
+            letter.theme = new_theme
             letter.moderation_time = datetime.utcnow()
             db.session.commit()
     new_letter = (

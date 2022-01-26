@@ -20,6 +20,20 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
                 self.rejected: 'Refusée',
             }.get(self, self.name)
 
+    class Theme(enum.Enum):
+        travel = enum.auto()
+        funny = enum.auto()
+        emotional = enum.auto()
+        other = enum.auto()
+
+        def __str__(self):
+            return {
+                self.travel: 'Voyage',
+                self.funny: 'Drôle',
+                self.emotional: 'Émouvant',
+                self.other: 'Autre',
+            }.get(self, self.name)
+
     email = sa.Column(sa.String, nullable=False)
     event = sa.Column(sa.String)
     is_male = sa.Column(sa.Boolean, nullable=False, server_default="1")
@@ -31,6 +45,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
+    theme = sa.Column(sa.Enum(Theme, native_enum=False))
     moderation_time = sa.Column(sa.DateTime)
     moderator_id = sa.Column(sa.ForeignKey('users.id'))
 
