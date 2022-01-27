@@ -17,6 +17,7 @@ class Package(db.Base, db.IdMixin, db.TimedMixin):
     """
     file = sa.Column(sa.String)
     recipient_id = sa.Column(sa.ForeignKey('recipients.id'), nullable=False)
+    is_complete = sa.Column(sa.Boolean)  # If there is not enough letters, we still send the package but we indicate it in the mail
 
     recipient = orm.relationship('Recipient', backref='packages')
     letters = orm.relationship('Letter', secondary=packages_letters, backref='packages')

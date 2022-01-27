@@ -58,13 +58,20 @@ def generate_packages():
             filepath = os.path.join(upload_directory, filename)
             html_package_to_pdf(html_package, filepath)
             print("PDF generated")
-            db.session.add(Package(file=filepath, recipient=recipient, letters=[letter for letter in package]))
+            db.session.add(Package(file=filepath,
+                                   recipient=recipient,
+                                   letters=[letter for letter in package],
+                                   is_complete=is_complete))
             db.session.commit()
             print("Database updated")
+            email_body = f"Vos lettres sont disponibles ici: {filepath}"
+            if not is_complete:
+                email_body += f"\nNous n'avons pas reçu assez de lettres pour vous envoyer les {recipient.nb_letters}" \
+                              f" lettres demandées, vous n'en trouverez que {package.count()} dans ce PDF."
             send_email(subject="Vos lettres 1 Lettre 1 Sourire",
                        sender="admin@1lettre1sourire.org",
                        recipients=[user.email for user in recipient.users],
-                       text_body=f"Vos lettres sont disponibles ici: {filepath}")
+                       text_body=email_body)
             print("Package sent")
 
 
