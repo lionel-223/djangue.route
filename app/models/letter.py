@@ -45,7 +45,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
-    theme = sa.Column(sa.Enum(Theme, native_enum=False))
+    theme = sa.Column(sa.Enum(Theme, native_enum=False))    # If not null, it means the letter is marked as a "favorite"
     moderation_time = sa.Column(sa.DateTime)
     moderator_id = sa.Column(sa.ForeignKey('users.id'))
 

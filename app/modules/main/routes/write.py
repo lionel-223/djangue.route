@@ -12,12 +12,15 @@ def write(event=None):
     if not form.validate_on_submit():
         return render_template('write.html', form=form)
 
+    greeting = form.greeting.data
+    if not greeting.endswith(","):
+        greeting = greeting + ','
     letter = Letter(
         event=event,
         language_code=form.language_code.data,
         is_male=form.is_male.data,
         is_young=False,
-        content=form.greeting.data + ',\n' + form.content.data,
+        content=greeting + '\n' + form.content.data,
         signature=form.signature.data,
         email=form.email.data,
         country_code=form.country_code.data,

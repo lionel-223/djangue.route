@@ -1,0 +1,30 @@
+@font-face {
+  font-family: Luciole;
+  src: url(fonts/Luciole-Regular.ttf);
+}
+
+body {
+  text-align: justify;
+  font-size: 15pt;
+  font-family: Luciole;
+  width: 170mm;
+  margin: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.letter-body {
+  white-space: pre-line;
+}
+
+.signature {
+  text-align: end;
+  font-weight: bold;
+  margin-top: 25px;
+}
+.images {
+  text-align: center;
+}

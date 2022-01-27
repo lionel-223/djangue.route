@@ -65,7 +65,7 @@ def register_assets(assets):
 
 
 def create_app():
-    from app import db
+    from app import db, commands
     from app.models import User
 
     app = Flask()
@@ -76,6 +76,7 @@ def create_app():
     for module in MODULES_FOLDER.glob('./*/'):
         module = importlib.import_module(f'.{module.stem}', 'app.modules')
         app.register_blueprint(module.bp)
+    app.register_blueprint(commands.bp)
 
     login_manager = LoginManager()
     login_manager.init_app(app)

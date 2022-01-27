@@ -2,8 +2,10 @@ from datetime import datetime
 import enum
 import sqlalchemy as sa
 from sqlalchemy import orm
+from sqlalchemy.sql.expression import func
 
 from app import db
+from . import Letter
 from .package import Package
 
 recipients_languages = sa.Table(
@@ -63,4 +65,22 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
         this_month = datetime.utcnow().month
         return this_month - self.frequency >= last_package.created_at.month
 
-
+    def generate_package(self, limit_date=None):
+        letters = db.session.query(Letter).filter((Letter.status == Letter.Status.approved) &
+                                                  (~Letter.is_young) &
+                                                  (Letter.id.not_in(self.received_letters)) &
+                                                  (Letter.language_code.in_([
+                                                      language.code for language in self.languages
+                                                  ])))
+        if limit_date:
+            letters = letters.filter(Letter.created_at >= limit_date)
+        specific_letters = letters.filter_by(specific_recipient=self)
+        nb_specific_letters = specific_letters.count()
+        letters = letters.except_(specific_letters).order_by(func.random()).limit(
+            self.nb_letters - nb_specific_letters)
+        # TODO faire des packages équilibrés hommes/femmes
+        package = letters.union(specific_letters)
+        if not package.first():  # No letters found
+            return None, None
+        is_complete = (package.count() == self.nb_letters)
+        return package, is_complete
