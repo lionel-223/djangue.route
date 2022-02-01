@@ -24,12 +24,24 @@ il permet juste de cliquer sur les bouton pour choisir le thème du coup de coeu
 <h2>Modération</h2>
 
 {% if letter %}
-<div>{{ letter.created_at }}</div>
-<div>{{ letter.language }}</div>
-<div>{{ letter.content }}</div>
-<div>{{ letter.signature }}</div>
+<div>Date d'écriture de la lettre : {{ letter.created_at }}</div>
+<div>L'auteur•e de la lettre : {{ letter.email }}</div>
 <form id="moderation_form" action="" method="post">
     <input type="text" hidden name="letter_id" value="{{ letter.id }}">
+    <label for="gender">La lettre s'adresse à :</label>
+    {% if letter.is_male %}
+    <select id="gender" name="gender" form="moderation_form">
+        <option value="{{ letter.is_male }}" selected>Un homme</option>
+        <option value="">Une femme</option>
+    </select>
+    {% else %}
+    <select id="gender" name="gender" form="moderation_form">
+        <option value="" selected>Une femme</option>
+        <option value="{{ True }}">Un homme</option>
+    </select>
+    {% endif %}
+    <textarea name="content" style="width:600px; height: 300px">{{ letter.content }}</textarea>
+    <input type="text" name="signature" value="{{ letter.signature }}">
     <button name="status" value="approved" type="submit">Approuver</button>
     <button name="status" value="rejected" type="submit">Refuser</button>
     <div class="dropdown">
