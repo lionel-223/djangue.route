@@ -13,7 +13,6 @@ from app.utils.email import send_email
 
 MAX_MONTHS_SINCE_LETTER = 12  # We don't send letters that are more than MAX_MONTHS_SINCE_LETTER months old
 LOGO_PATH = os.path.join(app.APP_FOLDER, 'static', 'logo', 'logo-150x.png')
-PDF_UPLOAD_FOLDER = os.path.join(app.APP_FOLDER, 'uploads', 'letter_packages')
 LETTER_CSS = os.path.join(app.APP_FOLDER, 'static', 'letter.css')
 
 
@@ -32,7 +31,7 @@ def compute_limit_date_letters():
 def generate_packages():
 
     today = datetime.utcnow().date()
-    upload_directory = os.path.join(PDF_UPLOAD_FOLDER, str(today.year), str(today.month))
+    upload_directory = os.path.join(app.PDF_UPLOAD_FOLDER, str(today.year), str(today.month))
     if not os.path.exists(upload_directory):
         os.makedirs(upload_directory)
 

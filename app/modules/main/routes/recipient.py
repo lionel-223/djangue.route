@@ -1,8 +1,12 @@
-from flask import render_template, redirect, url_for, flash, abort
+import os
+import ntpath
+
+from flask import render_template, redirect, url_for, flash, abort, send_from_directory
 from flask_login import current_user, login_user, login_required
 
+import app
 from app import db
-from app.models import User, Recipient, Language
+from app.models import User, Recipient, Language, Package
 from .. import bp, RecipientForm
 
 
@@ -13,7 +17,7 @@ def register_recipient():
         del form.email
         del form.password
     if not form.validate_on_submit():
-        return render_template('recipient.html', form=form)
+        return render_template('register_recipient.html', form=form)
 
     if not current_user.is_authenticated:
         user = User(email=form.email.data)
@@ -39,10 +43,10 @@ def register_recipient():
     return redirect(url_for('main.index'))
 
 
-@bp.route('/recipients/edit/<int:recipient_id>', methods=['GET', 'POST'])
+@bp.route('/recipients/edit/<int:recipient_id>/', methods=['GET', 'POST'])
 @login_required
 def edit_recipient(recipient_id):
-    recipient = db.session.query(Recipient).filter_by(id=recipient_id).first()
+    recipient = db.session.get(Recipient, recipient_id)
     if not recipient:
         abort(404)
     if not (current_user in recipient.users or current_user.can_edit_recipients):
@@ -53,7 +57,7 @@ def edit_recipient(recipient_id):
     del form.password
     del form.type
     if not form.validate_on_submit():
-        return render_template('recipient.html', form=form, recipient=recipient)
+        return render_template('register_recipient.html', form=form, recipient=recipient)
     recipient.name = form.name.data
     recipient.address = form.address.data
     recipient.zipcode = form.zipcode.data
@@ -65,3 +69,31 @@ def edit_recipient(recipient_id):
     db.session.commit()
     flash('Modifications enregistrées !')
     return redirect(url_for('main.index'))
+
+
+@bp.get('/recipient/<int:recipient_id>/')
+@login_required
+def recipient_home(recipient_id):
+    recipient = db.session.get(Recipient, recipient_id)
+    if not recipient:
+        abort(404)
+    if not (current_user in recipient.users or current_user.can_edit_recipients):
+        abort(403)
+    packages = db.session.query(Package).filter_by(recipient_id=recipient_id)
+    # TODO pagination
+    return render_template('recipient_home.html', recipient=recipient, packages=packages)
+
+
+@bp.get('/download_package/<int:package_id>/')
+@login_required
+def download_package(package_id):
+    package = db.session.get(Package, package_id)
+    if not package:
+        abort(404)
+    recipient = db.session.get(Recipient, package.recipient_id)
+    if not (current_user in recipient.users or current_user.can_edit_recipients):
+        abort(403)
+    pdf_folder = app.PDF_UPLOAD_FOLDER
+    date_package = package.created_at
+    package_directory = os.path.join(pdf_folder, str(date_package.year), str(date_package.month))
+    return send_from_directory(package_directory, ntpath.basename(package.file))

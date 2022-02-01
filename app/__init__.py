@@ -1,5 +1,6 @@
 import importlib
 import json
+import os
 from pathlib import Path
 from flask import Blueprint, Flask as BaseFlask, request
 from flask.json import JSONEncoder
@@ -13,6 +14,7 @@ assets = Environment()
 babel = Babel()
 APP_FOLDER = Path(__file__).parent
 MODULES_FOLDER = APP_FOLDER / 'modules'
+PDF_UPLOAD_FOLDER = os.path.join(APP_FOLDER, 'uploads', 'letter_packages')
 
 
 @babel.localeselector
