@@ -53,7 +53,7 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
 
     @property
     def received_letters(self):
-        return [letter.id for package in self.packages for letter in package]
+        return [letter.id for package in self.packages for letter in package.letters]
 
     @property
     def needs_new_package(self):
