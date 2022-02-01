@@ -5,5 +5,14 @@
 {% endblock %}
 
 {% block footer %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- Ce script permet d'afficher le champ select
+qui permet de changer le genre d'une lettre dans la modération
+À modifier dans le futur ! -->
+    <script>
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+    </script>
 {% endblock %}

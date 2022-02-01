@@ -12,6 +12,9 @@ def moderation():
     new_status = request.form.get('status', None)
     letter_id = request.form.get('letter_id', None)
     new_theme = request.form.get('theme', None)
+    new_content = request.form.get('content', None)
+    new_signature = request.form.get('signature', None)
+    new_gender = request.form.get('gender', None)
     if letter_id and new_status:
         new_status = Letter.Status[new_status]
         letter = db.session.query(Letter).get(letter_id)
@@ -19,6 +22,9 @@ def moderation():
             flash('Oups ! Cette lettre avait déjà été modérée...')
         else:
             letter.status = new_status
+            letter.content = new_content
+            letter.signature = new_signature
+            letter.is_male = bool(new_gender)
             letter.moderation_time = datetime.utcnow()
             db.session.commit()
     if letter_id and new_theme:
@@ -29,12 +35,16 @@ def moderation():
         else:
             letter.status = 'approved'
             letter.theme = new_theme
+            letter.content = new_content
+            letter.signature = new_signature
+            letter.is_male = bool(new_gender)
             letter.moderation_time = datetime.utcnow()
             db.session.commit()
     new_letter = (
         db.session.query(Letter)
         .filter((Letter.status == Letter.Status.not_moderated) &
-                ((Letter.moderation_time == None) | (Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1))))
+                ((Letter.moderation_time == None) | (Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
+        )
         .order_by(Letter.created_at).first()
     )
     if new_letter:
