@@ -2,9 +2,11 @@
 
 {% block content %}
 	<h2>Ecrivez une lettre</h2>
+    {% if not request.args.is_young %}
     <p>
         Si vous souhaitez écrire à un jeune, cliquer sur ce lien :
-        <a href="{{ url_for('main.write_young') }}" class="button">Écrire à jeune</a>
+        <a href="{{ url_for('main.write', is_young=True) }}" class="button">Écrire à jeune</a>
     </p>
+    {% endif %}
 	{% include "_form.html" %}
 {% endblock %}
