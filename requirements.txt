@@ -9,6 +9,7 @@ flask-login
 email-validator
 Flask-Assets
 cssmin
+Pillow
 
 # db / ORM
 SQLAlchemy
