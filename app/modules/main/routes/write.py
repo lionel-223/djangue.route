@@ -11,8 +11,9 @@ from app import db
 from app.models import Letter, Upload
 from .. import bp, LetterForm
 
-FILE_UPLOAD_FOLDER = os.path.join(app.APP_FOLDER, 'uploads', 'letter_upload')
+FILE_UPLOAD_FOLDER = os.path.join(app.APP_FOLDER, 'uploads', 'image_upload')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+IMAGE_SIZE = ((150, 150), (300, 300), (500, 500))
 
 
 def allowed_file(filename):
@@ -48,9 +49,8 @@ def write():
         allow_reuse=form.allow_reuse.data
     )
 
-    today = datetime.utcnow().date()
     file = form.upload.data
-    upload_directory = os.path.join(FILE_UPLOAD_FOLDER, str(today.year), str(today.month))
+    upload_directory = FILE_UPLOAD_FOLDER
     if not os.path.exists(upload_directory):
         os.makedirs(upload_directory)
 
@@ -64,11 +64,11 @@ def write():
             extension=file_ext
         )
         letter.upload_hash = upload.hash
+        image = Image.open(file)
+        image.thumbnail(IMAGE_SIZE[1])
+        image.save(os.path.join(upload_directory, filename))
         db.session.add(upload)
         db.session.commit()
-        image = Image.open(file)
-        image.thumbnail((300, 300))
-        image.save(os.path.join(upload_directory, filename))
 
     db.session.add(letter)
     db.session.commit()
