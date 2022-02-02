@@ -1,7 +1,6 @@
 import os.path
 import hashlib
 
-from datetime import datetime
 from flask import request, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from PIL import Image
@@ -9,6 +8,7 @@ from PIL import Image
 import app
 from app import db
 from app.models import Letter, Upload
+from app.utils.str_to_bool import strtobool
 from .. import bp, LetterForm
 
 FILE_UPLOAD_FOLDER = os.path.join(app.APP_FOLDER, 'uploads', 'image_upload')
@@ -23,7 +23,7 @@ def allowed_file(filename):
 
 @bp.route('/write/', methods=['GET', 'POST'])
 def write():
-    is_young = request.args.get('is_young', None) == 'True'
+    is_young = strtobool(request.args.get('is_young', None))
     event = request.args.get('event', None)
     form = LetterForm()
     if not form.validate_on_submit():
