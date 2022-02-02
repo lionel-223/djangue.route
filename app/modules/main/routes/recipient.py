@@ -1,5 +1,4 @@
 import os
-import ntpath
 
 from flask import render_template, redirect, url_for, flash, abort, send_from_directory
 from flask_login import current_user, login_user, login_required
@@ -96,4 +95,4 @@ def download_package(package_id):
     pdf_folder = app.PDF_UPLOAD_FOLDER
     date_package = package.created_at
     package_directory = os.path.join(pdf_folder, str(date_package.year), str(date_package.month))
-    return send_from_directory(package_directory, ntpath.basename(package.file))
+    return send_from_directory(package_directory, package.file)

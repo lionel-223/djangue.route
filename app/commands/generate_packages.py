@@ -57,7 +57,7 @@ def generate_packages():
             filepath = os.path.join(upload_directory, filename)
             html_package_to_pdf(html_package, filepath)
             print("PDF generated")
-            db.session.add(Package(file=filepath,
+            db.session.add(Package(file=filename,
                                    recipient=recipient,
                                    letters=[letter for letter in package],
                                    is_complete=is_complete))
