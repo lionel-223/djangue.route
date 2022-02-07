@@ -11,19 +11,15 @@ from app.models import Letter, Upload
 from app.utils.str_to_bool import strtobool
 from .. import bp, LetterForm
 
-FILE_UPLOAD_FOLDER = os.path.join(app.APP_FOLDER, 'uploads', 'image_upload')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-IMAGE_SIZE = ((150, 150), (300, 300), (500, 500))
-
 
 def allowed_file(filename):
     return '.' in filename and \
-            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+            filename.rsplit('.', 1)[1].lower() in app.ALLOWED_EXTENSIONS
 
 
 @bp.route('/write/', methods=['GET', 'POST'])
 def write():
-    is_young = strtobool(request.args.get('is_young', None))
+    is_young = strtobool(request.args.get('is_young', ''))
     event = request.args.get('event', None)
     form = LetterForm()
     if not form.validate_on_submit():
@@ -50,25 +46,29 @@ def write():
     )
 
     file = form.upload.data
-    upload_directory = FILE_UPLOAD_FOLDER
+    upload_directory = app.FILE_UPLOAD_FOLDER
     if not os.path.exists(upload_directory):
         os.makedirs(upload_directory)
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         name, file_ext = os.path.splitext(filename)
-        file_hash = hashlib.md5(name.encode())
-        upload = Upload(
-            hash=file_hash.hexdigest(),
-            name=name,
-            extension=file_ext
-        )
-        letter.upload_hash = upload.hash
-        image = Image.open(file)
-        image.thumbnail(IMAGE_SIZE[1])
-        image.save(os.path.join(upload_directory, filename))
-        db.session.add(upload)
-        db.session.commit()
+        file_hash = hashlib.md5(name.encode()).hexdigest()
+        hash_exist = db.session.query(db.session.query(Upload).filter_by(hash=file_hash).exists()).scalar()
+        if hash_exist:
+            letter.upload_hash = file_hash
+        else:
+            upload = Upload(
+                hash=file_hash,
+                name=name,
+                extension=file_ext
+            )
+            letter.upload_hash = upload.hash
+            image = Image.open(file)
+            image.thumbnail(app.IMAGE_SIZE)
+            image.save(os.path.join(upload_directory, file_hash + file_ext))
+            db.session.add(upload)
+            db.session.commit()
 
     db.session.add(letter)
     db.session.commit()

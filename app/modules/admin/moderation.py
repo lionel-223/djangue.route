@@ -1,9 +1,12 @@
+import os
+
 from datetime import datetime, timedelta
 from flask import request, flash, render_template
 from flask_login import current_user
 
+import app
 from app import db
-from app.models import Letter, Recipient
+from app.models import Letter, Recipient, Upload
 from . import bp
 
 
@@ -15,12 +18,15 @@ def moderation():
     new_content = request.form.get('content', None)
     new_signature = request.form.get('signature', None)
     new_gender = request.form.get('gender', None)
+    delete_image = request.form.get('delete_image', None)
     if letter_id and new_status:
         new_status = Letter.Status[new_status]
         letter = db.session.query(Letter).get(letter_id)
         if letter.status != Letter.Status.not_moderated:
             flash('Oups ! Cette lettre avait déjà été modérée...')
         else:
+            if delete_image:
+                letter.upload_hash = None
             letter.status = new_status
             letter.content = new_content
             letter.signature = new_signature
@@ -33,6 +39,8 @@ def moderation():
         if letter.status != Letter.Status.not_moderated:
             flash('Oups ! Cette lettre avait déjà été modérée...')
         else:
+            if delete_image:
+                letter.upload_hash = None
             letter.status = 'approved'
             letter.theme = new_theme
             letter.content = new_content
@@ -47,11 +55,16 @@ def moderation():
         )
         .order_by(Letter.created_at).first()
     )
+    full_image_name = None
     if new_letter:
         new_letter.moderation_time = datetime.utcnow()
         new_letter.moderator = current_user
+        if new_letter.upload_hash:
+            image = db.session.get(Upload, new_letter.upload_hash)
+            image_name = image.hash + image.extension
+            full_image_name = os.path.join(app.FILE_UPLOAD_FOLDER, image_name)
         db.session.commit()
-    return render_template('admin/moderation.html', letter=new_letter)
+    return render_template('admin/moderation.html', letter=new_letter, full_image_name=full_image_name)
 
 
 @bp.post('/moderation/unlock_letter/<int:letter_id>')

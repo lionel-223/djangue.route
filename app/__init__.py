@@ -15,6 +15,9 @@ babel = Babel()
 APP_FOLDER = Path(__file__).parent
 MODULES_FOLDER = APP_FOLDER / 'modules'
 PDF_UPLOAD_FOLDER = os.path.join(APP_FOLDER, 'uploads', 'letter_packages')
+FILE_UPLOAD_FOLDER = os.path.join(APP_FOLDER, 'uploads', 'image_upload')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+IMAGE_SIZE = (300, 300)
 
 
 @babel.localeselector

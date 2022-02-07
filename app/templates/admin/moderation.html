@@ -42,6 +42,15 @@ il permet juste de cliquer sur les bouton pour choisir le thème du coup de coeu
     {% endif %}
     <textarea name="content" style="width:600px; height: 300px">{{ letter.content }}</textarea>
     <input type="text" name="signature" value="{{ letter.signature }}">
+    {% if full_image_name %}
+    <!-- La source de l'image est vide en attendant de savoir si on place le dossier uploads dans static -->
+    <img src="" /><br>
+    <label>
+        <input type="checkbox" id="delete_image" name="delete_image" value="delete">
+        <span>Supprimer l'image de la lettre</span>
+    </label>
+    <br>
+    {% endif %}
     <button name="status" value="approved" type="submit">Approuver</button>
     <button name="status" value="rejected" type="submit">Refuser</button>
     <div class="dropdown">
@@ -56,5 +65,6 @@ il permet juste de cliquer sur les bouton pour choisir le thème du coup de coeu
 </form>
 {% else %}
 <div>Aucune lettre à modérer</div>
+<a href="{{ url_for('main.index') }}">Revenir à la page d'accueil</a>
 {% endif %}
 {% endblock %}
