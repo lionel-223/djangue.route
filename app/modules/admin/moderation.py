@@ -1,8 +1,8 @@
 import os
 
 from datetime import datetime, timedelta
-from flask import request, flash, render_template
-from flask_login import current_user
+from flask import request, flash, render_template, abort, send_from_directory
+from flask_login import current_user, login_required
 
 import app
 from app import db
@@ -55,16 +55,23 @@ def moderation():
         )
         .order_by(Letter.created_at).first()
     )
-    full_image_name = None
     if new_letter:
         new_letter.moderation_time = datetime.utcnow()
         new_letter.moderator = current_user
-        if new_letter.upload_hash:
-            image = db.session.get(Upload, new_letter.upload_hash)
-            image_name = image.hash + image.extension
-            full_image_name = os.path.join(app.FILE_UPLOAD_FOLDER, image_name)
         db.session.commit()
-    return render_template('admin/moderation.html', letter=new_letter, full_image_name=full_image_name)
+    return render_template('admin/moderation.html', letter=new_letter)
+
+
+@bp.get('/image_upload/<upload_hash>/')
+@login_required
+def image_upload(upload_hash):
+    image = db.session.get(Upload, upload_hash)
+    if not image:
+        abort(404)
+    image_name = image.hash + image.extension
+    if not current_user.can_moderate:
+        abort(403)
+    return send_from_directory(app.FILE_UPLOAD_FOLDER, image_name)
 
 
 @bp.post('/moderation/unlock_letter/<int:letter_id>')
