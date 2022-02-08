@@ -2,12 +2,5 @@
 
 {% block content %}
 	<h2>Inscrire mon établissement scolaire</h2>
-    {% if current_user.is_anonymous %}
-    <div>
-        Si vous avez déjà un compte utilisateur, merci de vous connecter
-        <a href="{{ url_for('main.login', next=url_for('main.register_school')) }}">ici</a>
-        avant d'inscrire votre établissement.
-    </div>
-    {% endif %}
 	{% include "_form.html" %}
 {% endblock %}

@@ -8,4 +8,4 @@ from .forms.login import LoginForm, RegistrationForm
 from .forms.recipient import RecipientForm
 from .forms.contact import ContactForm
 from .forms.school import SchoolForm
-from .routes import index, login, write, recipient, recipient_list, contact, school
+from .routes import index, login, write, recipient, recipient_list, contact, school, user_home

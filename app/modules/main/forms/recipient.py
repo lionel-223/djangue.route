@@ -7,8 +7,6 @@ from app.models import Country, Language, Recipient
 
 
 class RecipientForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Mot de passe", validators=[DataRequired()])
     type = SelectField("Type d'entité", validators=[DataRequired()])
     name = StringField("Nom de l'entité", validators=[DataRequired()])
     address = StringField("Adresse", validators=[DataRequired()])

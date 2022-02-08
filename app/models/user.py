@@ -20,13 +20,16 @@ class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     can_see_stats = sa.Column(sa.Boolean, default=False)
     can_edit_recipients = sa.Column(sa.Boolean, default=False)
 
-    recipients = orm.relationship("Recipient", secondary=users_recipients, backref="users")
+    recipients = orm.relationship("Recipient", secondary=users_recipients, backref="users", lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def __str__(self):
+        return self.email
 
     @property
     def admin_accesses(self):

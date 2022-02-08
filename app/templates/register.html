@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if request.args.get('next') in [url_for('main.register_recipient'), url_for('main.register_school')] %}
+    <p>
+        Avant de pouvoir inscrire votre établissement, vous devez vous créer un compte personnel ci-dessous.
+        Si vous avez déjà un compte, merci de vous connecter
+        <a href="{{ url_for('main.login', next=request.args.get('next')) }}">ici</a>.
+    </p>
+    {% endif %}
 	<h2>Inscription utilisateur</h2>
 	{% include "_form.html" %}
 {% endblock %}

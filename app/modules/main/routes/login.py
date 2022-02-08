@@ -11,9 +11,9 @@ from .. import bp, LoginForm, RegistrationForm
 def login():
     target = request.args.get('next')
     if not target or url_parse(target).netloc != '':
-        target = url_for('main.index')
+        target = url_for('main.user_home')
     if current_user.is_authenticated:
-        return target
+        return redirect(target)
 
     form = LoginForm()
     if not form.validate_on_submit():
@@ -38,10 +38,11 @@ def logout():
 
 @bp.route('/register/', methods=['GET', 'POST'])
 def register():
-    target = redirect(url_for('main.index'))
+    target = request.args.get('next')
+    if not target or url_parse(target).netloc != '':
+        target = url_for('main.index')
     if current_user.is_authenticated:
-        flash('Déjà connecté')
-        return target
+        return redirect(target)
 
     form = RegistrationForm()
     if not form.validate_on_submit():
@@ -53,4 +54,4 @@ def register():
     db.session.commit()
     flash('Inscription réussie')
     login_user(user, remember=form.remember_me.data)
-    return target
+    return redirect(target)

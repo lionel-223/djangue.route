@@ -10,20 +10,12 @@ from .. import bp, RecipientForm
 
 
 @bp.route('/recipients/register/', methods=['GET', 'POST'])
+@login_required
 def register_recipient():
     form = RecipientForm()
-    if current_user.is_authenticated:
-        del form.email
-        del form.password
     if not form.validate_on_submit():
         return render_template('register_recipient.html', form=form)
 
-    if not current_user.is_authenticated:
-        user = User(email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        login_user(user)
     recipient = Recipient(
         type=form.type.data,
         name=form.name.data,
@@ -39,7 +31,7 @@ def register_recipient():
     db.session.add(recipient)
     db.session.commit()
     flash('Inscription réussie !')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.recipient_home'))
 
 
 @bp.route('/recipients/edit/<int:recipient_id>/', methods=['GET', 'POST'])
@@ -52,8 +44,6 @@ def edit_recipient(recipient_id):
         abort(403)
     form = RecipientForm(obj=recipient)
     form.languages.data = [language.code for language in recipient.languages]
-    del form.email
-    del form.password
     del form.type
     if not form.validate_on_submit():
         return render_template('register_recipient.html', form=form, recipient=recipient)
@@ -67,12 +57,12 @@ def edit_recipient(recipient_id):
     recipient.nb_letters = form.nb_letters.data or None
     db.session.commit()
     flash('Modifications enregistrées !')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.recipient_detail', recipient_id=recipient_id))
 
 
 @bp.get('/recipient/<int:recipient_id>/')
 @login_required
-def recipient_home(recipient_id):
+def recipient_detail(recipient_id):
     recipient = db.session.get(Recipient, recipient_id)
     if not recipient:
         abort(404)
@@ -80,7 +70,7 @@ def recipient_home(recipient_id):
         abort(403)
     packages = db.session.query(Package).filter_by(recipient_id=recipient_id)
     # TODO pagination
-    return render_template('recipient_home.html', recipient=recipient, packages=packages)
+    return render_template('recipient_detail.html', recipient=recipient, packages=packages)
 
 
 @bp.get('/download_package/<int:package_id>/')

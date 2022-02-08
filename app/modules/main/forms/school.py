@@ -7,8 +7,6 @@ from app.models import Country, Language
 
 
 class SchoolForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Mot de passe", validators=[DataRequired()])
     name = StringField("Nom de l'établissement", validators=[DataRequired()])
     address = StringField("Adresse", validators=[DataRequired()])
     zipcode = StringField("Code postal", validators=[DataRequired()])

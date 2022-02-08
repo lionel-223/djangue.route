@@ -27,9 +27,16 @@
 				<div id="nav-menu">
 					<ul id="nav-list">
 						<li><a href="{{ url_for('main.write') }}">Écrire une lettre</a></li>
-						<li><a href="{{ url_for('main.login') }}">Recevoir des lettres</a></li>
-						<li><a href="{{ url_for('main.index') }}">À propos</a></li>
+						<li><a href="{{ url_for('main.register', next=url_for('main.register_recipient')) }}">Recevoir des lettres</a></li>
+						<li><a href="{{ url_for('main.register', next=url_for('main.register_school')) }}">Espace prof</a></li>
 						<li><a href="{{ url_for('main.index') }}">Contact</a></li>
+						<li>
+                            {% if current_user.is_anonymous %}
+                            <a href="{{ url_for('main.login') }}">Connexion</a>
+                            {% else %}
+                            <a href="{{ url_for('main.user_home') }}">Mon espace</a>
+                            {% endif %}
+                        </li>
 						<li class="socials">
 							<a>
 								<i class="bx bxl-facebook"></i>

@@ -1,0 +1,12 @@
+{% extends'base.html' %}
+
+{% block content %}
+    <h1 style="margin-bottom: 0">Mon Espace Perso</h1>
+    <span><a href="{{ url_for('main.logout') }}">Déconnexion</a></span>
+    <div style="margin-top: 2em">
+        {% if current_user.recipients.count() > 0 %}<a href="{{ url_for('main.recipient_home') }}">Espace EHPAD/Asso</a>{% endif %}
+        {% if current_user.schools %}<a href="{{ url_for('main.teacher_home') }}">Espace Professeur</a>{% endif %}
+        {% if current_user.can_moderate %}<a href="{{ url_for('admin.index') }}">Espace Modération</a>{% endif %}
+    </div>
+    {% block tab_content %}{% endblock %}
+{% endblock %}

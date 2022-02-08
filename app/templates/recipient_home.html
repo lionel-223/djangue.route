@@ -1,42 +1,29 @@
-{% extends 'base.html' %}
+{% extends 'user_home.html' %}
 
-{% block content %}
-    <h1>{{ recipient.name }}</h1>
-    <h3>Informations</h3>
-    <div>
-        <b>Inscrit depuis le</b> {{ recipient.created_at.strftime('%d/%m/%Y') }}<br>
-        <b>Type de structure :</b> {{ recipient.type }}<br>
-        <b>Adresse :</b> {{ recipient.address }}, {{ recipient.city }} {{ recipient.zipcode }}<br>
-        Reçoit <b>{{ recipient.nb_letters }} lettres</b> tous les <b>{{ recipient.frequency }} mois</b><br>
-        <b>Langues acceptées : </b>
-        <ul>
-            {% for language in recipient.languages %}
-            <li> - {{ language }}</li>
-            {% endfor %}
-        </ul>
-        <a href="{{ url_for('main.edit_recipient', recipient_id=recipient.id) }}">Modifier les informations</a>
-    </div>
-    <h3>PDF reçus</h3>
-    {% if packages.count() %}
-    <table>
-        <thead>
-            <tr>
-                <th>Date d'envoi</th>
-                <th>Nombre de lettres</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for package in packages %}
-            <tr>
-                <td>{{ package.created_at.strftime('%d/%m/%Y') }}</td>
-                <td>{{ package.letters | length }}</td>
-                <td><a href="{{ url_for('main.download_package', package_id=package.id) }}">Télécharger</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <div>Aucun PDF reçu pour l'instant.</div>
+{% block tab_content %}
+    {% if ehpads.count() > 0 %}
+        <div style="margin-bottom: 2em;">
+            <h2>Mes EHPAD</h2>
+            <ul>
+                {% for ehpad in ehpads %}
+                <li>
+                    <a href="{{ url_for('main.recipient_detail', recipient_id=ehpad.id) }}">{{ ehpad.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
+    {% if associations.count() > 0 %}
+        <div style="margin-bottom: 2em;">
+            <h2>Mes associations</h2>
+            <ul>
+                {% for asso in associations %}
+                <li>
+                    <a href="{{ url_for('main.recipient_detail', recipient_id=asso.id) }}">{{ asso.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <a href="{{ url_for('main.register_recipient') }}">Ajouter un nouvel établissement/organisme</a>
 {% endblock %}
