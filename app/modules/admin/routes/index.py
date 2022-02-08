@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from app import db
 from app.models import Letter, Recipient
-from . import bp
+from .. import bp
 
 
 @bp.route('/')

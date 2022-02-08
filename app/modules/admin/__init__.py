@@ -13,4 +13,5 @@ def before_request():
         return "no admin access"
 
 
-from . import index, moderation
+from .forms.article_form import ArticleForm
+from .routes import index, moderation, article_form

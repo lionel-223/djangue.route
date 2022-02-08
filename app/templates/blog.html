@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Bienvenue sur le blog d'1 Lettre 1 Sourire !</h2>
+{% if articles %}
+<h4>Voici la liste des articles écrits par les bénévoles de l'association</h4>
+{% for article in articles %}
+    <li>
+        <a href="{{ url_for('main.article', article_id=article.id) }}">
+            <img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
+        </a><br>
+        <p><strong>{{ article.title }}</strong></p>
+        <p>{{ article.created_at.strftime('%d-%m-%Y') }}</p>
+    </li>
+{% endfor %}
+{% else %}
+<p>Il n'y a pas encore d'articles publiés</p>
+{% endif %}
+{% endblock %}

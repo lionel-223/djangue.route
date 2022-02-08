@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 import app
 from app import db
 from app.models import Letter, Recipient, Upload
-from . import bp
+from .. import bp
 
 
 @bp.route('/moderation/', methods=['GET', 'POST'])

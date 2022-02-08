@@ -7,3 +7,4 @@ from .school import School
 from .upload import Upload
 from .user import User
 from .writing_session import WritingSession
+from .article import Article
