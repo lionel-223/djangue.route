@@ -3,6 +3,9 @@
 {% block content %}
 {% if article %}
 <h3>{{ article.title }}</h3>
+{% if article.upload_hash %}
+<img src="{{ url_for('main.image_blog_upload', upload_hash=article.upload_hash) }}">
+{% endif %}
 <p>{{ article.content }}</p><br>
 <p>Publié le : {{ article.created_at.strftime('%d-%m-%Y') }} par <strong>{{ author.email }}</strong></p>
 {% endif %}
