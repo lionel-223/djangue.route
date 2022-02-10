@@ -1,6 +1,7 @@
 {% extends 'user_home.html' %}
 
 {% block tab_content %}
+    <div style="margin-bottom: 2em;">
         <h2>Mes établissements</h2>
         <ul>
             {% for school in schools %}
@@ -9,4 +10,6 @@
             </li>
             {% endfor %}
         </ul>
+    </div>
+    <a href="{{ url_for('main.register_school') }}">Ajouter un nouvel établissement</a>
 {% endblock %}

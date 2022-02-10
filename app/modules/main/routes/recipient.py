@@ -1,6 +1,7 @@
 import os
+import json
 
-from flask import render_template, redirect, url_for, flash, abort, send_from_directory
+from flask import render_template, redirect, url_for, flash, abort, send_from_directory, request
 from flask_login import current_user, login_user, login_required
 
 import app
@@ -13,12 +14,25 @@ from .. import bp, RecipientForm
 @login_required
 def register_recipient():
     form = RecipientForm()
-    if not form.validate_on_submit():
+    if not form.is_submitted():
+        return render_template('register_recipient.html', form=form)
+
+    if not form.name.data == 'new':
+        recipient = db.session.get(Recipient, int(form.name.data))
+        if current_user in recipient.users:
+            flash('Votre compte est déjà lié à cet établissement')
+        else:
+            recipient.users.append(current_user)
+            db.session.commit()
+        return redirect(url_for('main.recipient_home'))
+
+    form.name.choices = [(form.name.data, form.name.data)]  # Since we use select2, there are no defined choices for field 'name', which would cause form.validate() to crash
+    if not form.validate():
         return render_template('register_recipient.html', form=form)
 
     recipient = Recipient(
         type=form.type.data,
-        name=form.name.data,
+        name=form.new_name.data,
         address=form.address.data,
         zipcode=form.zipcode.data,
         city=form.city.data,
@@ -86,3 +100,14 @@ def download_package(package_id):
     date_package = package.created_at
     package_directory = os.path.join(pdf_folder, str(date_package.year), str(date_package.month))
     return send_from_directory(package_directory, package.file)
+
+
+@bp.get('/recipients/search/')
+def recipients_search():
+    search = request.args.get('term')
+    if not search:
+        return {'results': [], 'search': ''}
+    results = db.session.query(Recipient).filter(Recipient.name.ilike(f'%{search}%'))
+    response = {'results': [{'id': recipient.id, 'text': recipient.name} for recipient in results],
+                'search': search}
+    return response

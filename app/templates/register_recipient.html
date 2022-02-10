@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+
 {% block content %}
     {% if recipient %}
     <h2>Modifier les informations de {{ recipient.name }}</h2>
@@ -7,4 +13,54 @@
 	<h2>Inscrire mon établissement ou mon association pour recevoir des lettres.</h2>
     {% endif %}
 	{% include "_form.html" %}
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('[data-field-name]').each(function(){
+                if ($(this).data('field-name') !== 'name'){
+                    $(this).attr("hidden", true);
+                    $(this).attr("required", false);
+                };
+            })
+        });
+
+        $('#name').select2({
+            ajax: {
+                url: '{{ url_for('main.recipients_search') }}',
+                processResults: function (data) {
+                    data.results.push({'id': 'new', 'text': data.search});
+                    return {
+                        results: data.results
+                    }
+                },
+            },
+            width: '200px'
+        });
+
+        $('#name').change(function(){
+            var new_name = $(this).text();
+            if ($(this).val() === 'new'){
+                $('[data-field-name]').each(function(){
+                    if ($(this).data('field-name') == 'new_name'){
+                        $(this).children('input').val(new_name);
+                    } else {
+                        $(this).attr("hidden", false);
+                        $(this).children('input, select').attr("required", $(this).data('field-required') === "True")
+                    }
+                })
+            } else {
+                $('[data-field-name]').each(function(){
+                if ($(this).data('field-name') !== 'name'){
+                    $(this).attr("hidden", true);
+                    $(this).children('input, select').attr("required", false)
+                };
+                if ($(this).data('field-name') === 'submit'){
+                    $(this).attr('hidden', false)
+                }
+            })
+            }
+        })
+    </script>
+
 {% endblock %}
