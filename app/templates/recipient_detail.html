@@ -14,7 +14,10 @@
             <li> - {{ language }}</li>
             {% endfor %}
         </ul>
-        <a href="{{ url_for('main.edit_recipient', recipient_id=recipient.id) }}">Modifier les informations</a>
+        <a href="{{ url_for('main.edit_recipient', recipient_id=recipient.id) }}">Modifier les informations</a><br>
+        <a href="{{ url_for('main.remove_current_user_recipient', recipient_id=recipient.id) }}">
+            Me désinscrire de cet établissement
+        </a>
     </div>
     <h3>PDF reçus</h3>
     {% if packages.count() %}

@@ -111,3 +111,11 @@ def recipients_search():
     response = {'results': [{'id': recipient.id, 'text': recipient.name} for recipient in results],
                 'search': search}
     return response
+
+
+@bp.route('/recipients/remove_current_user/<int:recipient_id>')
+def remove_current_user_recipient(recipient_id):
+    recipient = db.session.get(Recipient, recipient_id)
+    recipient.users.remove(current_user)
+    db.session.commit()
+    return redirect(url_for('main.user_home'))

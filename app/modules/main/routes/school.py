@@ -26,3 +26,11 @@ def register_school():
     db.session.commit()
     flash('Inscription réussie !')
     return redirect(url_for('main.teacher_home'))
+
+
+@bp.route('/schools/remove_current_user/<int:school_id>')
+def remove_current_user_school(school_id):
+    school = db.session.get(School, school_id)
+    school.teachers.remove(current_user)
+    db.session.commit()
+    return redirect(url_for('main.user_home'))

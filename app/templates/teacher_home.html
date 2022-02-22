@@ -7,6 +7,9 @@
             {% for school in schools %}
             <li>
                 {{ school.name }}
+                (<a href="{{ url_for('main.remove_current_user_school', school_id=school.id) }}">
+                    Me désinscrire de cet établissement
+                </a>)
             </li>
             {% endfor %}
         </ul>
