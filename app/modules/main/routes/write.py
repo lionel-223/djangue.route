@@ -7,7 +7,7 @@ from PIL import Image
 
 import app
 from app import db
-from app.models import Letter, Upload
+from app.models import Letter, Upload, WritingSession
 from app.utils.str_to_bool import strtobool
 from .. import bp, LetterForm
 
@@ -21,6 +21,12 @@ def allowed_file(filename):
 def write():
     is_young = strtobool(request.args.get('is_young', ''))
     event = request.args.get('event', None)
+    writing_session_id = request.args.get('writing_session', None)
+    if writing_session_id:
+        if not db.session.get(WritingSession, writing_session_id):
+            flash('WritingSession not found')
+            writing_session_id = None
+
     form = LetterForm()
     if not form.validate_on_submit():
         if is_young:
@@ -33,6 +39,7 @@ def write():
         greeting = greeting + ','
     letter = Letter(
         event=event,
+        writing_session_id=writing_session_id,
         language_code=form.language_code.data,
         is_male=form.is_male.data,
         is_young=is_young,

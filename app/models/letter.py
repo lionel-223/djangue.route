@@ -36,6 +36,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
 
     email = sa.Column(sa.String, nullable=False)
     event = sa.Column(sa.String)
+    writing_session_id = sa.Column(sa.ForeignKey('writing_sessions.id'))
     is_male = sa.Column(sa.Boolean, nullable=False, server_default="1")
     is_young = sa.Column(sa.Boolean)
     content = sa.Column(sa.String, nullable=False)
@@ -50,6 +51,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     moderator_id = sa.Column(sa.ForeignKey('users.id'))
 
     language = orm.relationship('Language', backref='letters')
+    writing_session = orm.relationship('WritingSession', backref='letters')
     upload = orm.relationship('Upload', backref='letters')
     specific_recipient = orm.relationship(
         'Recipient', backref='specific_letters'

@@ -1,6 +1,7 @@
 import enum
 
 import sqlalchemy as sa
+from sqlalchemy import orm
 
 from app import db
 
@@ -21,11 +22,15 @@ class WritingSession(db.Base, db.IdMixin, db.TimedMixin):
 
         def __str__(self):
             return {
-                self.teacher_moderation: 'Modéré par le professeur',
-                self.classic_moderation: 'Modéré par 1l1s',
+                self.teacher_moderation: 'Lettres en ligne corrigées par le professeur',
+                self.classic_moderation: 'Lettres en lignes modérées par 1l1s',
                 self.handwriting: 'Lettres manuscrites'
             }.get(self, self.name)
 
     type = sa.Column(sa.Enum(Type, native_enum=False))
     teacher_id = sa.Column(sa.ForeignKey('users.id'))
     school_id = sa.Column(sa.ForeignKey('schools.id'))
+    title = sa.Column(sa.String)
+
+    teacher = orm.relationship('User', backref='writing_sessions')
+    school = orm.relationship('School', backref='writing_sessions')

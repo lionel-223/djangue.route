@@ -14,5 +14,31 @@
             {% endfor %}
         </ul>
     </div>
-    <a href="{{ url_for('main.register_school') }}">Ajouter un nouvel établissement</a>
+    <a href="{{ url_for('main.register_school') }}">Ajouter un nouvel établissement</a><br>
+    <div>
+        <h2>Mes sessions d'écriture</h2>
+        {% if current_user.writing_sessions %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date de création</th>
+                    <th>Titre</th>
+                    <th>Lien</th>
+                    <th>Nombre de lettres</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for writing_session in current_user.writing_sessions %}
+                    <td>{{ writing_session.created_at.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ writing_session.title }}</td>
+                    <td>{{ url_for('main.write', writing_session=writing_session.id) }}</td>
+                    <td>{{ writing_session.letters|length }}</td>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        Aucune session créée pour l'instant <br>
+        {% endif %}
+        <a href="{{ url_for('main.create_writing_session') }}">Créer une nouvelle session d'écriture</a>
+    </div>
 {% endblock %}
