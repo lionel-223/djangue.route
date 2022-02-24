@@ -14,25 +14,12 @@ from .. import bp, RecipientForm
 @login_required
 def register_recipient():
     form = RecipientForm()
-    if not form.is_submitted():
-        return render_template('register_recipient.html', form=form)
-
-    if not form.name.data == 'new':
-        recipient = db.session.get(Recipient, int(form.name.data))
-        if current_user in recipient.users:
-            flash('Votre compte est déjà lié à cet établissement')
-        else:
-            recipient.users.append(current_user)
-            db.session.commit()
-        return redirect(url_for('main.recipient_home'))
-
-    form.name.choices = [(form.name.data, form.name.data)]  # Since we use select2, there are no defined choices for field 'name', which would cause form.validate() to crash
-    if not form.validate():
+    if not form.validate_on_submit():
         return render_template('register_recipient.html', form=form)
 
     recipient = Recipient(
         type=form.type.data,
-        name=form.new_name.data,
+        name=form.name.data,
         address=form.address.data,
         zipcode=form.zipcode.data,
         city=form.city.data,
@@ -43,6 +30,25 @@ def register_recipient():
     )
     recipient.users.append(current_user)
     db.session.add(recipient)
+    db.session.commit()
+    flash('Inscription réussie !')
+    return redirect(url_for('main.recipient_home'))
+
+
+@bp.route('/recipients/join/', methods=['GET', 'POST'])
+@login_required
+def join_existing_recipient():
+    if request.method == 'GET':
+        return render_template('join_recipient.html')
+    recipient_id = request.values.get('recipient_id')
+    recipient = db.session.get(Recipient, recipient_id)
+    if not recipient:
+        flash('This recipient does not exist !')
+        return render_template('join_recipient.html')
+    if recipient in current_user.recipients:
+        flash('You already belong to this recipient !')
+        return render_template('join_recipient.html')
+    current_user.recipients.append(recipient)
     db.session.commit()
     flash('Inscription réussie !')
     return redirect(url_for('main.recipient_home'))
@@ -106,10 +112,9 @@ def download_package(package_id):
 def recipients_search():
     search = request.args.get('term')
     if not search:
-        return {'results': [], 'search': ''}
+        return {'results': []}
     results = db.session.query(Recipient).filter(Recipient.name.ilike(f'%{search}%'))
-    response = {'results': [{'id': recipient.id, 'text': recipient.name} for recipient in results],
-                'search': search}
+    response = {'results': [{'id': recipient.id, 'text': recipient.name} for recipient in results]}
     return response
 
 

@@ -27,7 +27,7 @@
 				<div id="nav-menu">
 					<ul id="nav-list">
 						<li><a href="{{ url_for('main.write') }}">Écrire une lettre</a></li>
-						<li><a href="{{ url_for('main.register', next=url_for('main.register_recipient')) }}">Recevoir des lettres</a></li>
+						<li><a href="{{ url_for('main.register', next=url_for('main.join_existing_recipient')) }}">Recevoir des lettres</a></li>
 						<li><a href="{{ url_for('main.register', next=url_for('main.register_school')) }}">Espace prof</a></li>
 						<li><a href="{{ url_for('main.index') }}">Contact</a></li>
 						<li>

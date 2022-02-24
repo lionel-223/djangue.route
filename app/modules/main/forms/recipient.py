@@ -7,8 +7,7 @@ from app.models import Country, Language, Recipient
 
 
 class RecipientForm(FlaskForm):
-    name = SelectField("Nom de l'entité", validators=[DataRequired()])  # This field is used to select an existing recipient
-    new_name = StringField("Nom de l'entité")  # This field is used to set the name for a new recipient, or edit the name of an existing one
+    name = StringField("Nom de l'entité", validators=[DataRequired()])
     type = SelectField("Type d'entité", validators=[DataRequired()])
     address = StringField("Adresse", validators=[DataRequired()])
     zipcode = StringField("Code postal", validators=[DataRequired()])
