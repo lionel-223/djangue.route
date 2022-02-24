@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
+
+{% block content %}
+	<h2>Trouver mon établissement</h2>
+    <div>
+        Recherchez votre établissement scolaire parmi nos partenaires. <br>
+        Si vous ne le trouvez pas, vous pouvez l'inscrire <a href="{{ url_for('main.register_school') }}">ici</a>.
+    </div>
+    <form method="post" action="">
+        <select type="text" id="school_search" name="school_id" required></select>
+        <button type="submit">Valider</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#school_search').select2({
+            ajax: {
+                url: "{{ url_for('main.schools_search') }}"
+            },
+            width: '25em',
+        })
+    </script>
+{% endblock %}
