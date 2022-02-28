@@ -1,0 +1,31 @@
+nav {
+	color: unset;
+	background-color: unset;
+	box-shadow: unset;
+	height: unset;
+	line-height: unset;
+}
+
+nav i {
+	height: unset;
+}
+
+nav ul {
+	margin: unset;
+}
+
+nav ul a {
+	font-size: unset;
+	display: unset;
+	padding: unset;
+}
+
+nav ul a:hover {
+	background-color: unset;
+}
+
+nav ul li {
+	transition: unset;
+	float: unset;
+	padding: unset;
+}

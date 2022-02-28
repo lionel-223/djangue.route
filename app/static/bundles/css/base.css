@@ -37,7 +37,7 @@ a:hover {
 }
 
 
-.container {
+.page {
 	max-width: var(--page-width);
 	width: calc(100% - 2rem);
 	margin: auto;

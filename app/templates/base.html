@@ -9,16 +9,16 @@
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+		{% block head %}{% endblock %}
     {% assets "css" %}
 		<link rel="stylesheet" href="{{ ASSET_URL }}">
 		{% endassets %}
-		{% block head %}{% endblock %}
 	</head>
 
 	<body>
 
 		<header id="header">
-			<nav class="container" id="nav">
+			<nav class="page" id="nav">
 				<a href="{{ url_for('main.index') }}" class="logo">
 					<img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
 					<span class="title">1 Lettre 1 Sourire</span>
@@ -70,7 +70,7 @@
 		</div>
 		{% block content %}{% endblock %}
 		{% block footer %}
-		<footer id="footer" class="container">
+		<footer id="footer" class="page">
 			<div class="sections grid cells">
 				<section>
 					<a href="{{ url_for('main.index') }}" class="title">1 Lettre 1 Sourire</a>

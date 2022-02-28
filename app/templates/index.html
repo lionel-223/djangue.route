@@ -12,7 +12,7 @@
 {% block content %}
 <main id="landing">
 	<section id="home">
-		<div class="container grid cols full-height">
+		<div class="page grid cols full-height">
 			<div class="text">
 				<img src="{{ url_for('static', filename='logo/logo-150x.png') }}">
 				<h2 class="title">De l'amour en quelques clics</h2>
@@ -26,7 +26,7 @@
 	</section>
 
 	<section id="about">
-		<div class="container grid cols full-height">
+		<div class="page grid cols full-height">
 			<div>
 				<img class="image" src="{{ url_for('static', filename='assets/stock/closeup_smiling_female.jpg') }}">
 			</div>
@@ -48,10 +48,10 @@
 	</section>
 
 	<section id="how-it-works">
-		<div class="container">
+		<div class="page">
 			<p class="subtitle">Fonctionnement</p>
 			<h2 class="title">Comment ça marche</h2>
-			<div class="container grid cells">
+			<div class="page grid cells">
 				<div>
 					<img src="{{ url_for('static', filename='assets/icons/writing.svg') }}">
 					<h3>Écriture</h3>
@@ -75,10 +75,10 @@
 	</section>
 
 	<section id="participate">
-		<div class="container">
+		<div class="page">
 			<p class="subtitle">Choisir une option</p>
 			<h2 class="title">Je souhaite…</h2>
-			<div class="container grid cells">
+			<div class="page grid cells">
 				<div class="card col">
 					<a class="image" href="{{ url_for('main.write') }}">
 						<img src="{{ url_for('static', filename='assets/art/write_letter_side_male.gif') }}">
@@ -100,7 +100,7 @@
 
 	<section id="gallery">
 		<h2 class="title">Nos coups de cœur</h2>
-		<div class="container" id="letters-carousel">
+		<div class="page" id="letters-carousel">
 			<div class="image">
 				<img src="{{ url_for('static', filename='assets/letters/letter1.jpg') }}">
 			</div>
