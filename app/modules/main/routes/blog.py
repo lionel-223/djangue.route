@@ -23,7 +23,7 @@ def article(article_id):
     return render_template('article.html', article=article, author=author)
 
 
-@bp.get('/image_blog_upload/<upload_hash>')
+@bp.get('/image-blog-upload/<upload_hash>')
 def image_blog_upload(upload_hash):
     image = db.session.get(Upload, upload_hash)
     if not image:

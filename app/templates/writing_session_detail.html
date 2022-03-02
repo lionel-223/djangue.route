@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ writing_session.title }}</h2>
+    {% if writing_session.letters %}
+    <table>
+        <thead>
+            <tr>
+                <th>Signature</th>
+                <th>Date</th>
+                {% if writing_session.type == types.teacher_moderation %}
+                <th>Corrigée</th>
+                {% endif %}
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for letter in writing_session.letters %}
+            <tr>
+                <td>{{ letter.signature }}</td>
+                <td>{{ letter.created_at.strftime('%d/%m/%Y') }}</td>
+                {% if writing_session.type == types.teacher_moderation %}
+                <td>{{ letter.moderation_time != None }}</td>
+                <td><a href="{{ url_for('admin.moderate_letter', letter_id=letter.id) }}">Corriger</a></td>
+                {% else %}
+                <td><a href="{{ url_for('main.letter_detail', letter_id=letter.id) }}">Voir</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% elif writing_session.type != types.handwriting %}
+    <div>Aucune lettre écrite pour l'instant</div>
+    {% else %}
+        {% if writing_session.handwritten_letters %}
+            <table>
+            <thead>
+            <tr>
+                <th>Nom du fichier</th>
+                <th>Date</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in writing_session.handwritten_letters %}
+            <tr>
+                <td>{{ file.name }}.{{ file.extension }}</td>
+                <td>{{ file.created_at.strftime("%d/%m/%Y") }}</td>
+                <td><a href="{{ url_for('main.handwritten_letter_download', upload_hash=file.hash) }}">Voir</a></td>
+                <td><a href="{{ url_for('main.delete_handwritten_letter', upload_hash=file.hash) }}">Supprimer</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% else %}
+            Aucune lettre uploadée pour l'instant
+        {% endif %}
+        <h4>Uploader les photos des lettres</h4>
+        <form action="{{ url_for('main.upload_handwritten_letters') }}" method="post" enctype="multipart/form-data">
+            <input type="text" hidden name="session_id" value="{{ writing_session.id }}">
+            <input type="file" name="files" multiple>
+            <button type="submit">Uploader</button>
+        </form>
+    {% endif %}
+{% endblock %}

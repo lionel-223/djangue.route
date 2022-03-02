@@ -9,8 +9,9 @@ bp = Blueprint(__name__, prefix=True)
 @bp.before_request
 @login_required
 def before_request():
-    if not any(current_user.admin_accesses.values()):
-        return "no admin access"
+    # if not any(current_user.admin_accesses.values()):
+    #     return "no admin access"
+    pass
 
 
 from .forms.article import ArticleForm

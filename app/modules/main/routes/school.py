@@ -57,7 +57,7 @@ def schools_search():
     return response
 
 
-@bp.route('/schools/remove_current_user/<int:school_id>')
+@bp.route('/schools/remove-current-user/<int:school_id>')
 def remove_current_user_school(school_id):
     school = db.session.get(School, school_id)
     school.teachers.remove(current_user)

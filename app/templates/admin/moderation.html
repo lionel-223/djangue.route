@@ -29,21 +29,14 @@ il permet juste de cliquer sur les bouton pour choisir le thème du coup de coeu
 <form id="moderation_form" action="" method="post">
     <input type="text" hidden name="letter_id" value="{{ letter.id }}">
     <label for="gender">La lettre s'adresse à :</label>
-    {% if letter.is_male %}
     <select id="gender" name="gender" form="moderation_form">
-        <option value="{{ letter.is_male }}" selected>Un homme</option>
-        <option value="">Une femme</option>
+        <option value="{{ True }}" {% if letter.is_male %}selected{% endif %}>Un homme</option>
+        <option value="" {% if not letter.is_male %}selected{% endif %}>Une femme</option>
     </select>
-    {% else %}
-    <select id="gender" name="gender" form="moderation_form">
-        <option value="" selected>Une femme</option>
-        <option value="{{ True }}">Un homme</option>
-    </select>
-    {% endif %}
     <textarea name="content" style="width:600px; height: 300px">{{ letter.content }}</textarea>
     <input type="text" name="signature" value="{{ letter.signature }}">
     {% if letter.upload_hash %}
-    <img src="{{ url_for('admin.image_upload', upload_hash=letter.upload_hash) }}" /><br>
+    <img src="{{ url_for('admin.image_download', upload_hash=letter.upload_hash) }}" /><br>
     <label>
         <input type="checkbox" id="delete_image" name="delete_image" value="delete">
         <span>Supprimer l'image de la lettre</span>

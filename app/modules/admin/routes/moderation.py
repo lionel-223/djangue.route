@@ -62,9 +62,17 @@ def moderation():
     return render_template('admin/moderation.html', letter=new_letter)
 
 
-@bp.get('/image_upload/<upload_hash>/')
+@bp.route('/moderation/<int:letter_id>')
+def moderate_letter(letter_id):
+    letter = db.session.get(Letter, letter_id)
+    if not letter:
+        abort(404)
+    return render_template('admin/moderation.html', letter=letter)
+
+
+@bp.get('/image-download/<upload_hash>/')
 @login_required
-def image_upload(upload_hash):
+def image_download(upload_hash):
     image = db.session.get(Upload, upload_hash)
     if not image:
         abort(404)
@@ -74,7 +82,7 @@ def image_upload(upload_hash):
     return send_from_directory(app.FILE_UPLOAD_FOLDER, image_name)
 
 
-@bp.post('/moderation/unlock_letter/<int:letter_id>')
+@bp.post('/moderation/unlock-letter/<int:letter_id>')
 def unlock_letter(letter_id):
     """
     When a moderator leaves the moderation interface, the letter he was reviewing must have its

@@ -93,7 +93,7 @@ def recipient_detail(recipient_id):
     return render_template('recipient_detail.html', recipient=recipient, packages=packages)
 
 
-@bp.get('/download_package/<int:package_id>/')
+@bp.get('/download-package/<int:package_id>/')
 @login_required
 def download_package(package_id):
     package = db.session.get(Package, package_id)

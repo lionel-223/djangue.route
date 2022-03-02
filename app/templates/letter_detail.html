@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+    <p>{{ letter.content }}</p>
+    <p>{{ letter.signature }}</p>
+    </div>
+    <div>
+    <b>Date :</b> {{ letter.created_at.strftime('%d/%m/%Y') }}<br>
+    <b>Email de l'auteur :</b> {{ letter.email }}
+    </div>
+    <div>
+    <button><a href="{{ url_for('main.writing_session_detail', session_id=letter.writing_session_id) }}">Retour</a></button>
+    </div>
+{% endblock %}

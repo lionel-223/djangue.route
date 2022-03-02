@@ -1,7 +1,8 @@
 import os.path
 import hashlib
 
-from flask import request, render_template, redirect, url_for, flash
+from flask import request, render_template, redirect, url_for, flash, abort
+from flask_login import login_required
 from werkzeug.utils import secure_filename
 from PIL import Image
 
@@ -35,7 +36,7 @@ def write():
         return render_template('write.html', form=form)
 
     greeting = form.greeting.data
-    if not greeting.endswith(","):
+    if not greeting.endswith((",", ".", "!")):
         greeting = greeting + ','
     letter = Letter(
         event=event,
@@ -81,3 +82,13 @@ def write():
     db.session.commit()
     flash('Ta lettre a été enregistrée, elle sera envoyée prochainement.')
     return redirect(url_for('main.index'))
+
+
+@bp.get('/letter/<int:letter_id>')
+@login_required
+def letter_detail(letter_id):
+    letter = db.session.get(Letter, letter_id)
+    if not letter:
+        abort(404)
+    return render_template('letter_detail.html', letter=letter)
+

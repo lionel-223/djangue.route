@@ -25,14 +25,18 @@
                     <th>Titre</th>
                     <th>Lien</th>
                     <th>Nombre de lettres</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for writing_session in current_user.writing_sessions %}
+                <tr>
                     <td>{{ writing_session.created_at.strftime('%d/%m/%Y') }}</td>
                     <td>{{ writing_session.title }}</td>
                     <td>{{ url_for('main.write', writing_session=writing_session.id) }}</td>
                     <td>{{ writing_session.letters|length }}</td>
+                    <td><a href="{{ url_for('main.writing_session_detail', session_id=writing_session.id) }}">Voir le détail</a></td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
