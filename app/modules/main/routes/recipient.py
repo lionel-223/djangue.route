@@ -7,6 +7,7 @@ from flask_login import current_user, login_user, login_required
 import app
 from app import db
 from app.models import User, Recipient, Language, Package
+from app.utils.pagination import paginate
 from .. import bp, RecipientForm
 
 
@@ -88,8 +89,8 @@ def recipient_detail(recipient_id):
         abort(404)
     if not (current_user in recipient.users or current_user.can_edit_recipients):
         abort(403)
-    packages = db.session.query(Package).filter_by(recipient_id=recipient_id)
-    # TODO pagination
+    page = int(request.args.get('page', 1))
+    packages = paginate(db.session.query(Package).filter_by(recipient_id=recipient_id), page, 10)
     return render_template('recipient_detail.html', recipient=recipient, packages=packages)
 
 

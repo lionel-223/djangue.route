@@ -1,8 +1,9 @@
-from flask import render_template, redirect, url_for, abort
+from flask import render_template, redirect, url_for, abort, request
 from flask_login import current_user, login_required
 
 from app import db
-from app.models import User, Recipient
+from app.models import User, Recipient, WritingSession
+from app.utils.pagination import paginate
 from .. import bp
 
 
@@ -34,4 +35,6 @@ def teacher_home():
     schools = current_user.schools
     if len(schools) == 0:
         abort(404)
-    return render_template('teacher_home.html', schools=schools)
+    page = int(request.args.get('page', 1))
+    writing_sessions = paginate(db.session.query(WritingSession).filter_by(teacher=current_user), page, 10)
+    return render_template('teacher_home.html', schools=schools, writing_sessions=writing_sessions)

@@ -17,7 +17,7 @@
     <a href="{{ url_for('main.join_existing_school') }}">Rejoindre un autre établissement</a><br>
     <div>
         <h2>Mes sessions d'écriture</h2>
-        {% if current_user.writing_sessions %}
+        {% if writing_sessions.items %}
         <table>
             <thead>
                 <tr>
@@ -29,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for writing_session in current_user.writing_sessions %}
+                {% for writing_session in writing_sessions.items %}
                 <tr>
                     <td>{{ writing_session.created_at.strftime('%d/%m/%Y') }}</td>
                     <td>{{ writing_session.title }}</td>
@@ -40,6 +40,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if writing_sessions.has_prev %} <a href="?page={{ writing_sessions.prev }}">Page précédente</a>{% endif %}
+        {% if writing_sessions.has_next %} <a href="?page={{ writing_sessions.next }}">Page suivante</a>{% endif %}<br>
         {% else %}
         Aucune session créée pour l'instant <br>
         {% endif %}
