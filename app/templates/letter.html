@@ -13,7 +13,9 @@
       <div class="letter-body">{{ letter.content }}</div>
       <div class="signature">{{ letter.signature }}</div>
     </div>
-    <div class="page-filler"></div>
+      {% if letter.upload_hash %}
+    <div class="image"><img src="{{ image_path }}"></div>
+      {% endif %}
   </div>
 </body>
 </html>

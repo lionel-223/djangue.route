@@ -47,7 +47,11 @@ def generate_packages():
                 continue
             html_package = [
                 {
-                    "html": render_template('letter.html', letter=letter, logo_path=LOGO_PATH, css_path=LETTER_CSS),
+                    "html": render_template('letter.html', letter=letter, logo_path=LOGO_PATH, css_path=LETTER_CSS,
+                                            image_path=os.path.join(app.FILE_UPLOAD_FOLDER,
+                                                                    letter.upload_hash + letter.upload.extension)
+                                                        if letter.upload_hash else None
+                                            ),
                     "id": letter.id,
                     "author_email": letter.email
                 }
