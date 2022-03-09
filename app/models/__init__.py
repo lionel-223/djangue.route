@@ -8,3 +8,4 @@ from .upload import Upload, HandwrittenLetter
 from .user import User
 from .writing_session import WritingSession
 from .article import Article
+from .settings import Setting

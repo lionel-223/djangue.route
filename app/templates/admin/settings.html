@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<form id="settings_form" action="" method="post">
+    <label for="partnership">Nom du partnership :</label>
+    <input type="text" id="partnership" name="partnership">
+
+    <div>Vous désirez que les modérateurs/relecteurs reçoivent :</div>
+    <label>
+        <input type="radio" class="with-gap" name="gender" value="neutral" checked>
+        <span>Lettres du circuit classique (pas de différences sur les lettres)</span>
+    </label>
+    <br>
+    <label>
+        <input type="radio" class="with-gap" name="gender" value="male">
+        <span>Plus de lettres destinées à des Hommes</span>
+    </label>
+    <br>
+    <label>
+        <input type="radio" class="with-gap" name="gender" value="female">
+        <span>Plus de lettres destinées à des Femmes</span>
+    </label>
+    <br>
+    <button type="submit">Envoyer</button>
+</form>
+{% endblock %}

@@ -1,12 +1,10 @@
-import os
-
 from datetime import datetime, timedelta
 from flask import request, flash, render_template, abort, send_from_directory
 from flask_login import current_user, login_required
 
 import app
 from app import db
-from app.models import Letter, Recipient, Upload
+from app.models import Letter, Recipient, Upload, Setting
 from .. import bp
 
 
@@ -55,6 +53,48 @@ def moderation():
         )
         .order_by(Letter.created_at).first()
     )
+
+    settings = db.session.get(Setting, 1)
+    if settings.partnership:
+        letter_count = db.session.query(Letter).filter((Letter.event == settings.partnership) &
+                                                       (Letter.status == Letter.Status.not_moderated)).count()
+        if letter_count > 0:
+            new_letter = (
+                db.session.query(Letter)
+                    .filter((Letter.status == Letter.Status.not_moderated) &
+                            ((Letter.moderation_time == None) | (
+                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
+                            & (Letter.event == settings.partnership)
+                            )
+                    .order_by(Letter.created_at).first()
+            )
+    if settings.gender == Setting.Gender.male:
+        letter_count = db.session.query(Letter).filter((Letter.is_male == True) &
+                                                       (Letter.status == Letter.Status.not_moderated)).count()
+        if letter_count > 0:
+            new_letter = (
+                db.session.query(Letter)
+                    .filter((Letter.status == Letter.Status.not_moderated) &
+                            ((Letter.moderation_time == None) | (
+                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
+                            & (Letter.is_male == True)
+                            )
+                    .order_by(Letter.created_at).first()
+            )
+    if settings.gender == Setting.Gender.female:
+        letter_count = db.session.query(Letter).filter((Letter.is_male == False) &
+                                                       (Letter.status == Letter.Status.not_moderated)).count()
+        if letter_count > 0:
+            new_letter = (
+                db.session.query(Letter)
+                    .filter((Letter.status == Letter.Status.not_moderated) &
+                            ((Letter.moderation_time == None) | (
+                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
+                            & (Letter.is_male == False)
+                            )
+                    .order_by(Letter.created_at).first()
+            )
+
     if new_letter:
         new_letter.moderation_time = datetime.utcnow()
         new_letter.moderator = current_user

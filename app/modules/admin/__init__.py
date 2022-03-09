@@ -15,4 +15,4 @@ def before_request():
 
 
 from .forms.article import ArticleForm
-from .routes import index, moderation, article
+from .routes import index, moderation, article, settings
