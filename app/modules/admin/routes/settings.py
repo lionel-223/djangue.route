@@ -11,10 +11,7 @@ def settings():
     if request.method == 'POST':
         new_partnership = request.form.get('partnership', None)
         new_gender = request.form.get('gender')
-        settings = db.session.get(Setting, 1)
-        if new_partnership and new_gender != 'neutral':
-            flash('Vous ne pouvez pas choisir le genre dans les lettres à modérer pour un partenariat')
-            return render_template('admin/settings.html')
+        settings = db.session.query(Setting).first()
         if settings:
             settings.partnership = new_partnership
             settings.gender = new_gender

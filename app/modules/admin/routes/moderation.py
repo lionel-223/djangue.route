@@ -46,54 +46,22 @@ def moderation():
             letter.is_male = bool(new_gender)
             letter.moderation_time = datetime.utcnow()
             db.session.commit()
-    new_letter = (
+
+    available_letters = (
         db.session.query(Letter)
         .filter((Letter.status == Letter.Status.not_moderated) &
                 ((Letter.moderation_time == None) | (Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
         )
-        .order_by(Letter.created_at).first()
+        .order_by(Letter.created_at)
     )
+    new_letter = available_letters.first()
 
-    settings = db.session.get(Setting, 1)
+    settings = db.session.query(Setting).first()
     if settings.partnership:
-        letter_count = db.session.query(Letter).filter((Letter.event == settings.partnership) &
-                                                       (Letter.status == Letter.Status.not_moderated)).count()
-        if letter_count > 0:
-            new_letter = (
-                db.session.query(Letter)
-                    .filter((Letter.status == Letter.Status.not_moderated) &
-                            ((Letter.moderation_time == None) | (
-                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
-                            & (Letter.event == settings.partnership)
-                            )
-                    .order_by(Letter.created_at).first()
-            )
-    if settings.gender == Setting.Gender.male:
-        letter_count = db.session.query(Letter).filter((Letter.is_male == True) &
-                                                       (Letter.status == Letter.Status.not_moderated)).count()
-        if letter_count > 0:
-            new_letter = (
-                db.session.query(Letter)
-                    .filter((Letter.status == Letter.Status.not_moderated) &
-                            ((Letter.moderation_time == None) | (
-                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
-                            & (Letter.is_male == True)
-                            )
-                    .order_by(Letter.created_at).first()
-            )
-    if settings.gender == Setting.Gender.female:
-        letter_count = db.session.query(Letter).filter((Letter.is_male == False) &
-                                                       (Letter.status == Letter.Status.not_moderated)).count()
-        if letter_count > 0:
-            new_letter = (
-                db.session.query(Letter)
-                    .filter((Letter.status == Letter.Status.not_moderated) &
-                            ((Letter.moderation_time == None) | (
-                                    Letter.moderation_time <= datetime.utcnow() - timedelta(hours=1)))
-                            & (Letter.is_male == False)
-                            )
-                    .order_by(Letter.created_at).first()
-            )
+        new_letter = available_letters.filter(Letter.event == settings.partnership).first()
+
+    elif settings.gender != Setting.Gender.neutral:
+        new_letter = available_letters.filter(Letter.is_male == (settings.gender == Setting.Gender.male)).first()
 
     if new_letter:
         new_letter.moderation_time = datetime.utcnow()
