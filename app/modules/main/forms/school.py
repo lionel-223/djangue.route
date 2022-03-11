@@ -24,5 +24,5 @@ class SchoolForm(FlaskForm):
         ]
         self.languages.choices = [
             (language.code, str(language)) for language
-            in db.session.query(Language).filter_by(accepts_letters=True)
+            in db.session.query(Language)
         ]

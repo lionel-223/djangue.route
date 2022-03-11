@@ -23,16 +23,21 @@ def write():
     is_young = strtobool(request.args.get('is_young', ''))
     event = request.args.get('event', None)
     writing_session_id = request.args.get('writing_session', None)
-    if writing_session_id:
-        if not db.session.get(WritingSession, writing_session_id):
-            flash('WritingSession not found')
-            writing_session_id = None
+    writing_session = db.session.get(WritingSession, writing_session_id)
+    if writing_session_id and not writing_session:
+        flash('WritingSession not found')
+        writing_session_id = None
 
     form = LetterForm()
     if not form.validate_on_submit():
         if is_young:
             del form.specific_recipient_id
             return render_template('write_young.html', form=form)
+        if writing_session:
+            del form.specific_recipient_id
+            form.language_code.data = writing_session.language_code
+            form.country_code.data = writing_session.school.country_code
+            form.zipcode.data = writing_session.school.zipcode
         return render_template('write.html', form=form)
 
     greeting = form.greeting.data
@@ -52,7 +57,8 @@ def write():
         specific_recipient_id=form.specific_recipient_id.data or None,
         allow_reuse=form.allow_reuse.data
     )
-    if writing_session_id:
+    if writing_session:
+        # TODO ajouter le specific_recipient adéquat si jumelage avec un ehpad
         letter.status = Letter.Status.not_corrected
 
     file = form.upload.data

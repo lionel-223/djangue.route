@@ -78,10 +78,13 @@ def correct_letter(letter_id):
         validate = strtobool(request.form.get('validate'))
         new_content = request.form.get('content')
         new_signature = request.form.get('signature')
+        delete_image = request.form.get('delete_image', None)
         if validate:
             letter.content = new_content
             letter.signature = new_signature
             letter.status = Letter.Status.not_moderated
+            if delete_image:
+                letter.upload_hash = None
         else:
             letter.status = Letter.Status.rejected
             letter.writing_session_id = None

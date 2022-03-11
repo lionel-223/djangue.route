@@ -11,6 +11,15 @@
     <label for="content">Contenu de la lettre</label><br>
     <textarea name="content" style="width:600px; height: 300px">{{ letter.content }}</textarea>
     </div>
+    {% if letter.upload_hash %}
+    <div>
+    <img src="{{ url_for('admin.image_download', upload_hash=letter.upload_hash) }}" /><br>
+    <label>
+        <input type="checkbox" id="delete_image" name="delete_image" value="delete">
+        <span>Supprimer l'image de la lettre</span>
+    </label>
+    </div>
+    {% endif %}
     <div>
     <label for="signature">Signature</label><br>
     <input type="text" name="signature" value="{{ letter.signature }}">

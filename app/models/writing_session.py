@@ -31,6 +31,8 @@ class WritingSession(db.Base, db.IdMixin, db.TimedMixin):
     teacher_id = sa.Column(sa.ForeignKey('users.id'))
     school_id = sa.Column(sa.ForeignKey('schools.id'))
     title = sa.Column(sa.String)
+    language_code = sa.Column(sa.ForeignKey('languages.code'))
 
     teacher = orm.relationship('User', backref='writing_sessions')
     school = orm.relationship('School', backref='writing_sessions')
+    language = orm.relationship('Language', backref='writing_sessions')

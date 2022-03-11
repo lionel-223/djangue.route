@@ -16,7 +16,6 @@ class LetterForm(FlaskForm):
     upload = FileField("Photo", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     email = StringField("Email", validators=[DataRequired(), Email()])
     country_code = SelectField("Pays", validators=[DataRequired()])
-    city = StringField("Ville")
     zipcode = StringField("Code postal")
     specific_recipient_id = SelectField("Destination", validators=[Optional()], default='')
     terms_agreement = BooleanField("J'accepte les conditions", validators=[DataRequired()])
