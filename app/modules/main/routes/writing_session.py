@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 import app
 from app import db
-from app.models import WritingSession, HandwrittenLetter
+from app.models import WritingSession, HandwrittenLetter, Letter
 from .write import allowed_file
 from .. import bp, WritingSessionForm
 
@@ -39,7 +39,8 @@ def writing_session_detail(session_id):
         abort(404)
     if not (current_user == writing_session.teacher or current_user.can_edit_recipients):  # TODO Replace with the appropriate permission
         abort(403)
-    return render_template('writing_session_detail.html', writing_session=writing_session, types=WritingSession.Type)
+    return render_template('writing_session_detail.html', writing_session=writing_session, types=WritingSession.Type,
+                           statuses=Letter.Status)
 
 
 @bp.post('/writing-session/upload/')

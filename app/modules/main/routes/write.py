@@ -52,6 +52,8 @@ def write():
         specific_recipient_id=form.specific_recipient_id.data or None,
         allow_reuse=form.allow_reuse.data
     )
+    if writing_session_id:
+        letter.status = Letter.Status.not_corrected
 
     file = form.upload.data
     upload_directory = app.FILE_UPLOAD_FOLDER

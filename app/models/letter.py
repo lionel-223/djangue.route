@@ -3,18 +3,21 @@ import enum
 
 import sqlalchemy as sa
 from sqlalchemy import orm
+from sqlalchemy.orm import backref
 
 from app import db
 
 
 class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     class Status(enum.Enum):
+        not_corrected = enum.auto()
         not_moderated = enum.auto()
         approved = enum.auto()
         rejected = enum.auto()
 
         def __str__(self):
             return {
+                self.not_corrected: 'A corriger par le prof',
                 self.not_moderated: 'A modérer',
                 self.approved: 'Approuvée',
                 self.rejected: 'Refusée',
@@ -51,7 +54,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     moderator_id = sa.Column(sa.ForeignKey('users.id'))
 
     language = orm.relationship('Language', backref='letters')
-    writing_session = orm.relationship('WritingSession', backref='letters')
+    writing_session = orm.relationship('WritingSession', backref=backref('letters', order_by='Letter.created_at'))
     upload = orm.relationship('Upload', backref='letters')
     specific_recipient = orm.relationship(
         'Recipient', backref='specific_letters'

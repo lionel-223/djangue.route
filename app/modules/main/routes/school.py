@@ -1,8 +1,9 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import current_user, login_user, login_required
 
 from app import db
-from app.models import User, School, Language
+from app.models import User, School, Language, Letter
+from app.utils.str_to_bool import strtobool
 from .. import bp, SchoolForm
 
 
@@ -63,3 +64,27 @@ def remove_current_user_school(school_id):
     school.teachers.remove(current_user)
     db.session.commit()
     return redirect(url_for('main.user_home'))
+
+
+@bp.route('/schools/correct-letter/<int:letter_id>/', methods=['GET', 'POST'])
+def correct_letter(letter_id):
+    letter = db.session.get(Letter, letter_id)
+    if not letter:
+        abort(404)
+    if letter.writing_session not in current_user.writing_sessions:
+        abort(403)
+    if request.method == 'POST':
+        session_id = letter.writing_session_id
+        validate = strtobool(request.form.get('validate'))
+        new_content = request.form.get('content')
+        new_signature = request.form.get('signature')
+        if validate:
+            letter.content = new_content
+            letter.signature = new_signature
+            letter.status = Letter.Status.not_moderated
+        else:
+            letter.status = Letter.Status.rejected
+            letter.writing_session_id = None
+        db.session.commit()
+        return redirect(url_for('main.writing_session_detail', session_id=session_id))
+    return render_template('correct_letter.html', letter=letter)

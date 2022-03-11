@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Correction</h2>
+
+<div>Date d'écriture de la lettre : {{ letter.created_at.strftime('%d/%m/%Y') }}</div>
+<div>La lettre s'adresse à {% if letter.is_male %}un homme{% else %}une femme{% endif %}.</div>
+<form id="correction_form" action="" method="post">
+    <div>
+    <label for="content">Contenu de la lettre</label><br>
+    <textarea name="content" style="width:600px; height: 300px">{{ letter.content }}</textarea>
+    </div>
+    <div>
+    <label for="signature">Signature</label><br>
+    <input type="text" name="signature" value="{{ letter.signature }}">
+    </div>
+    <div>
+    <button name="validate" value="true" type="submit">Valider</button>
+    <button name="validate" value="false" type="submit">Supprimer cette lettre</button>
+    </div>
+</form>
+<div>
+<button><a href="{{ url_for('main.writing_session_detail', session_id=letter.writing_session_id) }}">Retour</a></button>
+</div>
+{% endblock %}

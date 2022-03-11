@@ -70,14 +70,6 @@ def moderation():
     return render_template('admin/moderation.html', letter=new_letter)
 
 
-@bp.route('/moderation/<int:letter_id>')
-def moderate_letter(letter_id):
-    letter = db.session.get(Letter, letter_id)
-    if not letter:
-        abort(404)
-    return render_template('admin/moderation.html', letter=letter)
-
-
 @bp.get('/image-download/<upload_hash>/')
 @login_required
 def image_download(upload_hash):

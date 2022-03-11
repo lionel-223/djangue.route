@@ -20,8 +20,8 @@
                 <td>{{ letter.signature }}</td>
                 <td>{{ letter.created_at.strftime('%d/%m/%Y') }}</td>
                 {% if writing_session.type == types.teacher_moderation %}
-                <td>{{ letter.moderation_time != None }}</td>
-                <td><a href="{{ url_for('admin.moderate_letter', letter_id=letter.id) }}">Corriger</a></td>
+                <td>{% if letter.status == statuses.not_corrected %}Non{% else %}Oui{% endif %}</td>
+                <td><a href="{{ url_for('main.correct_letter', letter_id=letter.id) }}">Corriger</a></td>
                 {% else %}
                 <td><a href="{{ url_for('main.letter_detail', letter_id=letter.id) }}">Voir</a></td>
                 {% endif %}
@@ -63,4 +63,7 @@
             <button type="submit">Uploader</button>
         </form>
     {% endif %}
+    <div>
+    <button><a href="{{ url_for('main.teacher_home') }}">Retour</a></button>
+    </div>
 {% endblock %}
