@@ -6,10 +6,7 @@
         <ul>
             {% for school in schools %}
             <li>
-                {{ school.name }}
-                (<a href="{{ url_for('main.remove_current_user_school', school_id=school.id) }}">
-                    Me désinscrire de cet établissement
-                </a>)
+                <a href="{{ url_for('main.school_detail', school_id=school.id) }}">{{ school.name }}</a>
             </li>
             {% endfor %}
         </ul>

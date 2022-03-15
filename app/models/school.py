@@ -19,6 +19,8 @@ schools_languages = sa.Table(
 
 class School(db.Base, db.IdMixin, db.LocationMixin, db.TimedMixin):
     name = sa.Column(sa.String)
+    recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
 
+    associated_recipient = orm.relationship('Recipient', backref='associated_school')
     teachers = orm.relationship('User', secondary=schools_teachers, backref='schools')
     languages = orm.relationship('Language', secondary=schools_languages, backref='schools')

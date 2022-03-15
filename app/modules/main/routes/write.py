@@ -58,7 +58,7 @@ def write():
         allow_reuse=form.allow_reuse.data
     )
     if writing_session:
-        # TODO ajouter le specific_recipient adéquat si jumelage avec un ehpad
+        letter.specific_recipient = writing_session.school.associated_recipient
         letter.status = Letter.Status.not_corrected
 
     file = form.upload.data

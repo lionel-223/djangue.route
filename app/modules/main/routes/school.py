@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import current_user, login_user, login_required
 
 from app import db
-from app.models import User, School, Language, Letter
+from app.models import User, School, Language, Letter, Recipient
 from app.utils.str_to_bool import strtobool
 from .. import bp, SchoolForm
 
@@ -21,6 +21,7 @@ def register_school():
         city=form.city.data,
         country_code=form.country_code.data,
         languages=[db.session.get(Language, x) for x in form.languages.data or []],
+        recipient_id=form.associated_recipient.data or None,
     )
     school.teachers.append(current_user)
     db.session.add(school)
@@ -46,6 +47,17 @@ def join_existing_school():
     db.session.commit()
     flash('Inscription réussie !')
     return redirect(url_for('main.teacher_home'))
+
+
+@bp.get('/schools/<int:school_id>')
+@login_required
+def school_detail(school_id):
+    school = db.session.get(School, school_id)
+    if not school:
+        abort(404)
+    if school not in current_user.schools:
+        abort(403)
+    return render_template('school_detail.html', school=school)
 
 
 @bp.get('/schools/search/')
@@ -91,3 +103,24 @@ def correct_letter(letter_id):
         db.session.commit()
         return redirect(url_for('main.writing_session_detail', session_id=session_id))
     return render_template('correct_letter.html', letter=letter)
+
+
+@bp.route('/school/<int:school_id>/associate_recipient', methods=['GET', 'POST'])
+def associate_recipient(school_id):
+    school = db.session.get(School, school_id)
+    if not school:
+        abort(404)
+    if school.associated_recipient or school not in current_user.schools:
+        abort(403)
+    target = redirect(url_for('main.school_detail', school_id=school_id))
+    if request.method == 'POST':
+        school.recipient_id = request.form.get('ehpad_id')
+        db.session.commit()
+        flash('Twinning created')
+        return target
+    ehpads = db.session.query(Recipient).filter(Recipient.type == Recipient.Types.retirement_home,
+                                                Recipient.associated_school == None)
+    if not ehpads.count():
+        flash('Aucun EHPAD disponible pour un jumelage')
+        return target
+    return render_template('associate_recipient.html', school=school, ehpads=ehpads)

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ school.name }}</h1>
+    <form action="" method="post">
+        <div>
+            <label for="ehpad_id">Sélectionnez l'EHPAD avec lequel vous souhaitez jumeler votre établissement</label><br>
+            <select name="ehpad_id">
+                {% for ehpad in ehpads %}
+                <option value="{{ ehpad.id }}">{{ ehpad.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Valider</button>
+        <button><a href="{{ url_for('main.school_detail', school_id=school.id) }}">Annuler</a></button>
+    </form>
+{% endblock %}

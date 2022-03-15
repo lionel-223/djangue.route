@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ school.name }}</h1>
+    <h3>Informations</h3>
+    <div>
+        <b>Inscrit depuis le</b> {{ school.created_at.strftime('%d/%m/%Y') }}<br>
+        <b>Adresse :</b> {{ school.address }}, {{ school.city }} {{ school.zipcode }}<br>
+        {% if school.associated_recipient %}
+        Jumelé avec <b>{{ school.associated_recipient }}</b><br>
+        {% endif %}
+        <b>Langue(s) parlée(s) : </b>
+        <ul>
+            {% for language in school.languages %}
+                <li> - {{ language }}</li>
+            {% endfor %}
+        </ul>
+        {% if not school.associated_recipient %}
+        <a href="{{ url_for('main.associate_recipient', school_id=school.id) }}">Jumeler cet établissement avec un EHPAD</a><br>
+        {% endif %}
+        <a href="{{ url_for('main.remove_current_user_school', school_id=school.id) }}">
+            Me désinscrire de cet établissement
+        </a>
+    </div>
+    <div>
+        <a href="{{ url_for('main.teacher_home') }}">Retour</a>
+    </div>
+{% endblock %}
