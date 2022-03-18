@@ -19,6 +19,33 @@
             Me désinscrire de cet établissement
         </a>
     </div>
+    <div>
+    <h3>Utilisateurs</h3>
+    {% if recipient.pending_users %}
+        <h4>En attente</h4>
+        <span>
+            Ces utilisateurs ont demandé à rejoindre votre établissement. Si vous les acceptez, ils reçevront les lettres
+            destinées à cet établissement et pourront modifier les informations.
+        </span>
+        <form action="{{ url_for('main.validate_pending_user', recipient_id=recipient.id) }}" method="post">
+            <table>
+                {% for user in recipient.pending_users %}
+                <tr>
+                    <td>{{ user }}</td>
+                    <td><button name="accept" value="{{ user.id }}" type="submit">Accepter</button></td>
+                    <td><button name="reject" value="{{ user.id }}" type="submit">Refuser</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+        <h4>Actifs</h4>
+    {% endif %}
+    <ul>
+        {% for user in recipient.users %}
+        <li>{{ user }}</li>
+        {% endfor %}
+    </ul>
+    </div>
     <h3>PDF reçus</h3>
     {% if packages.items %}
     <table>

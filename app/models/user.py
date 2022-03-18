@@ -12,6 +12,12 @@ users_recipients = sa.Table(
     sa.Column('recipient_id', sa.ForeignKey('recipients.id'))
 )
 
+users_pending_recipients = sa.Table(
+    'users_pending_recipients', db.Base.metadata,
+    sa.Column('user_id', sa.ForeignKey('users.id')),
+    sa.Column('recipient_id', sa.ForeignKey('recipients.id'))
+)
+
 
 class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     email = sa.Column(sa.String)
@@ -21,6 +27,8 @@ class User(db.TimedMixin, db.IdMixin, UserMixin, db.Base):
     can_edit_recipients = sa.Column(sa.Boolean, default=False)
 
     recipients = orm.relationship("Recipient", secondary=users_recipients, backref="users", lazy='dynamic')
+    pending_recipients = orm.relationship("Recipient", secondary=users_pending_recipients, backref="pending_users",
+                                          lazy='dynamic')  # Recipients for which the user has not yet been accepted
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

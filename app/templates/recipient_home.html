@@ -1,29 +1,27 @@
 {% extends 'user_home.html' %}
 
 {% block tab_content %}
-    {% if ehpads.count() > 0 %}
-        <div style="margin-bottom: 2em;">
-            <h2>Mes EHPAD</h2>
+    <div style="margin-bottom: 2em;">
+        <h2>Mes Etablissements</h2>
+        {% if recipients.count() > 0 %}
             <ul>
-                {% for ehpad in ehpads %}
-                <li>
-                    <a href="{{ url_for('main.recipient_detail', recipient_id=ehpad.id) }}">{{ ehpad.name }}</a>
-                </li>
+                {% for recipient in recipients %}
+                    <li>
+                        <a href="{{ url_for('main.recipient_detail', recipient_id=recipient.id) }}">{{ recipient }}</a>
+                    </li>
                 {% endfor %}
             </ul>
-        </div>
-    {% endif %}
-    {% if associations.count() > 0 %}
-        <div style="margin-bottom: 2em;">
-            <h2>Mes associations</h2>
+        {% endif %}
+        {% if pending_recipients.count() > 0 %}
+            <h4>En attente de validation</h4>
             <ul>
-                {% for asso in associations %}
-                <li>
-                    <a href="{{ url_for('main.recipient_detail', recipient_id=asso.id) }}">{{ asso.name }}</a>
-                </li>
+                {% for recipient in pending_recipients %}
+                    <li>
+                        {{ recipient }}
+                    </li>
                 {% endfor %}
             </ul>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
     <a href="{{ url_for('main.join_existing_recipient') }}">Rejoindre un autre établissement/organisme</a>
 {% endblock %}

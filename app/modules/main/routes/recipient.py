@@ -7,6 +7,7 @@ from flask_login import current_user, login_user, login_required
 import app
 from app import db
 from app.models import User, Recipient, Language, Package
+from app.utils.email import send_email
 from app.utils.pagination import paginate
 from .. import bp, RecipientForm
 
@@ -46,13 +47,53 @@ def join_existing_recipient():
     if not recipient:
         flash('This recipient does not exist !')
         return render_template('join_recipient.html')
-    if recipient in current_user.recipients:
-        flash('You already belong to this recipient !')
+    if recipient in current_user.recipients or recipient in current_user.pending_recipients:
+        flash('You already joined this recipient !')
         return render_template('join_recipient.html')
-    current_user.recipients.append(recipient)
+    current_user.pending_recipients.append(recipient)
     db.session.commit()
-    flash('Inscription réussie !')
+    send_email(subject="Nouvelle demande pour rejoindre " + recipient.name,
+               sender="no-reply@1lettre1sourire.org",
+               recipients=[user.email for user in recipient.users],
+               # TODO envoyer aux admins 1l1s si le recipient n'a pas de users
+               text_body=f"L'utilisateur {current_user.email} a demandé à rejoindre votre établissement. "
+                         f"Pour traiter sa demande : {url_for('main.recipient_detail', recipient_id=recipient_id)}")
+    flash("Demande envoyée ! Un administrateur de l'établissement validera prochainement votre inscription.")
     return redirect(url_for('main.recipient_home'))
+
+
+@bp.post('/recipients/<int:recipient_id>/validate-pending-user/')
+@login_required
+def validate_pending_user(recipient_id):
+    recipient = db.session.get(Recipient, recipient_id)
+    if not recipient:
+        abort(404)
+    if current_user not in recipient.users:
+        abort(403)
+    accepted_user = db.session.get(User, request.form.get('accept', None))
+    rejected_user = db.session.get(User, request.form.get('reject', None))
+    if accepted_user:
+        accepted_user.pending_recipients.remove(recipient)
+        accepted_user.recipients.append(recipient)
+        send_email(subject="Demande acceptée pour " + recipient.name,
+                   sender="no-reply@1lettre1sourire.org",
+                   recipients=[accepted_user.email],
+                   text_body=f"L'utilisateur {current_user.email} a accepté votre demande pour rejoindre"
+                             f"l'établissement {recipient.name}. Vous recevrez désormais les lettres destinées à cet "
+                             f"établissement et vous pourrez consulter et modifier ses informations ici :"
+                             f"{url_for('main.recipient_detail', recipient_id=recipient_id)}")
+    elif rejected_user:
+        rejected_user.pending_recipients.remove(recipient)
+        send_email(subject="Demande Refusée pour " + recipient.name,
+                   sender="no-reply@1lettre1sourire.org",
+                   recipients=[rejected_user.email],
+                   text_body=f"L'utilisateur {current_user.email} a refusé votre demande pour rejoindre"
+                             f"l'établissement {recipient.name}. Nous vous invitons à contacter directement "
+                             f"l'établissement pour connaitre les raisons de ce refus.")
+    else:
+        flash('User not found')
+    db.session.commit()
+    return redirect(url_for('main.recipient_detail', recipient_id=recipient_id))
 
 
 @bp.route('/recipients/edit/<int:recipient_id>/', methods=['GET', 'POST'])
