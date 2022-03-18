@@ -10,9 +10,12 @@ COUNTRY_CODES_DATA_URL = 'https://gist.github.com/tadast/8827699/raw/f5cac3d42d1
 LANGUAGE_CODES_DATA_URL = 'https://github.com/datasets/language-codes/raw/master/data/language-codes.csv'
 DEFAULT_LETTER_LANGUAGES = ['en', 'fr', 'nl', 'es', 'de']
 
-def import_countries():
+def get_countries_data():
     country_codes = requests.get(COUNTRY_CODES_DATA_URL).text
-    reader = csv.DictReader(country_codes.splitlines(), skipinitialspace=True)
+    return csv.DictReader(country_codes.splitlines(), skipinitialspace=True)
+
+def import_countries():
+    reader = get_countries_data()
     codes = (x['Alpha-2 code'] for x in reader)
     for code in codes:
         print('Adding', code, 'to countries')

@@ -3,15 +3,17 @@ from typing import Type
 from . import session
 
 
-def add(table, keys=None, commit=True, **kwargs):
+def add(table, keys=None, commit=True, stage=True, **kwargs):
     keys = keys or {}
     keys |= kwargs
     result = table(**keys)
-    session.add(result)
-    if commit:
+    if stage:
+        session.add(result)
+    if stage and commit:
         session.commit()
     #TODO use the logging lib
     print('Added', result, 'to db')
+    return result
 
 
 def get_or_create(
@@ -19,6 +21,7 @@ def get_or_create(
     search_keys: dict = None,
     create_keys=None,
     commit=True,
+    stage=True,
     include_search_in_create=True,
     **kwargs,
 ) -> object:
@@ -29,5 +32,5 @@ def get_or_create(
         create_keys = create_keys or {}
         if include_search_in_create:
             create_keys = search_keys | create_keys
-        add(table, create_keys, commit=commit)
+        result = add(table, create_keys, commit=commit, stage=stage)
     return result
