@@ -7,6 +7,7 @@ from sqlalchemy.sql.expression import func
 from app import db
 from . import Letter
 from .package import Package
+from ..utils.get_lat_long import get_lat_long
 
 recipients_languages = sa.Table(
     'recipients_languages', db.Base.metadata,
@@ -50,6 +51,10 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
 
     def __str__(self):
         return f'{self.name} ({self.type})'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.latitude, self.longitude = get_lat_long(self.address, self.city, self.zipcode, self.country_code)
 
     @property
     def received_letters(self):

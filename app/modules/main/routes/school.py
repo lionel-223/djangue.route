@@ -124,3 +124,9 @@ def associate_recipient(school_id):
         flash('Aucun EHPAD disponible pour un jumelage')
         return target
     return render_template('associate_recipient.html', school=school, ehpads=ehpads)
+
+
+@bp.get('/schools/list/')
+def schools_list():
+    schools = db.session.query(School).all()
+    return render_template('schools_list.html', schools=schools)

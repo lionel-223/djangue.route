@@ -24,6 +24,8 @@ class LocationMixin:
     zipcode = sa.Column(sa.String)
     address = sa.Column(sa.String)
     city = sa.Column(sa.String)
+    latitude = sa.Column(sa.Float)
+    longitude = sa.Column(sa.Float)
 
     @orm.declared_attr
     def country_code(_cls):

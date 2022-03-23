@@ -14,11 +14,11 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Liste des établissements partenaires</h2>
+    <h2>Liste des établissements scolaires partenaires</h2>
     <div id="map"></div>
     <div>
-        {% for recipient in recipients %}
-            <li>{{ recipient.type }} : {{ recipient.name }}</li>
+        {% for school in schools %}
+            <li>{{ school.name }}</li>
         {% endfor %}
     </div>
 {% endblock %}
@@ -40,9 +40,9 @@
             accessToken: 'pk.eyJ1IjoiYmVuamFtaW5taW9uIiwiYSI6ImNrbzhlNHN0NzBqdngydm1xazlha2h2encifQ.8Y9jlRIVxfqxVz59K1BdCg'
         }).addTo(map);
 
-        {% for recipient in recipients if recipient.latitude %}
-        var marker = L.marker([{{ recipient.latitude }}, {{ recipient.longitude }}]).addTo(map);
-        marker.bindPopup("<b>{{ recipient.name }}</b><br>{{ recipient.address }}, {{ recipient.city }}");
+        {% for school in schools if school.latitude %}
+        var marker = L.marker([{{ school.latitude }}, {{ school.longitude }}]).addTo(map);
+        marker.bindPopup("<b>{{ school.name }}</b><br>{{ school.address }}, {{ school.city }}");
         {% endfor %}
     </script>
 {% endblock %}
