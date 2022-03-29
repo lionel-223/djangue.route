@@ -1,4 +1,4 @@
-<div data-field-name="{{ field.name }}" data-field-required="{{ field.flags.__contains__('required') }}">
+<div data-field-name="{{ field.name }}" data-field-required="{{ field.flags.__contains__('required') }}" {% if hidden %}hidden{% endif %}>
 	{{ field.label }}<br>
 	{{ field }}<br>
 	{% for error in field.errors %}

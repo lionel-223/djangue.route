@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, BooleanField, HiddenField, RadioField
 from wtforms.validators import DataRequired, Email, Length, Optional, InputRequired
 
 from app import db, get_locale
@@ -17,7 +17,10 @@ class LetterForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     country_code = SelectField("Pays", validators=[DataRequired()])
     zipcode = StringField("Code postal")
-    specific_recipient_id = SelectField("Destination", validators=[Optional()], default='')
+    specific_recipient_bool = RadioField("Je souhaite choisir un établissement spécifique où sera envoyée ma lettre",
+                                         choices=[("false", "Non"), ("true", "Oui")], default="false")
+    specific_recipient_name = StringField('Ehpad sélectionné', render_kw={'readonly': True})
+    specific_recipient_id = HiddenField()
     terms_agreement = BooleanField("J'accepte les conditions", validators=[DataRequired()])
     allow_reuse = BooleanField("J'autorise l'utilisation de ma lettre anonymisée sur les réseaux sociaux")
     submit = SubmitField("Envoyer")
@@ -33,11 +36,11 @@ class LetterForm(FlaskForm):
             db.session.query(Language).filter_by(accepts_letters=True)
         ]
         self.specific_recipient_id.choices = [
-            (recipient.id, recipient.name) for recipient
-            in db.session.query(Recipient).filter_by(receives_letters=True)
-        ] + [('', "Au hasard")]
+                                                 (recipient.id, recipient.name) for recipient
+                                                 in db.session.query(Recipient).filter_by(receives_letters=True)
+                                             ] + [('', "Au hasard")]
         self.country_code.choices = [
             (country.code, str(country)) for country
             in db.session.query(Country)
-            if str(country)[0] != '<' # Exclude untranslated countries
+            if str(country)[0] != '<'  # Exclude untranslated countries
         ]

@@ -8,7 +8,7 @@ from PIL import Image
 
 import app
 from app import db
-from app.models import Letter, Upload, WritingSession
+from app.models import Letter, Upload, WritingSession, Recipient
 from app.utils.str_to_bool import strtobool
 from .. import bp, LetterForm
 
@@ -38,7 +38,8 @@ def write():
             form.language_code.data = writing_session.language_code
             form.country_code.data = writing_session.school.country_code
             form.zipcode.data = writing_session.school.zipcode
-        return render_template('write.html', form=form)
+        ehpads = db.session.query(Recipient).filter(Recipient.type == Recipient.Types.retirement_home)
+        return render_template('write.html', form=form, ehpads=ehpads)
 
     greeting = form.greeting.data
     if not greeting.endswith((",", ".", "!")):
