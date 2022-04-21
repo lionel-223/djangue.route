@@ -1,12 +1,71 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+{% endblock %}
+
 {% block content %}
-	<h2>Ecrivez une lettre</h2>
+    <h2>Ecrivez une lettre</h2>
     {% if not request.args.is_young %}
-    <p>
-        Si vous souhaitez écrire à un jeune, cliquer sur ce lien :
-        <a href="{{ url_for('main.write', is_young=True) }}" class="button">Écrire à jeune</a>
-    </p>
+        <p>
+            Si vous souhaitez écrire à un jeune, cliquer sur ce lien :
+            <a href="{{ url_for('main.write', is_young=True) }}" class="button">Écrire à jeune</a>
+        </p>
     {% endif %}
-	{% include "_form.html" %}
+    {% include "_form.html" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+    </script>
+    <script>
+        var map_div = document.createElement("div");
+        map_div.setAttribute("id", "map");
+        map_div.style.height = '500px';
+        map_div.style.width = '500px';
+        map_div.style.marginLeft = '50px';
+        var recipient_name = document.querySelector('[data-field-name="specific_recipient_name"]');
+        recipient_name.setAttribute("hidden", "true")
+        document.getElementById("form").insertBefore(map_div, recipient_name);
+
+        var map = L.map('map').setView([48, 2], 5);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoiYmVuamFtaW5taW9uIiwiYSI6ImNrbzhlNHN0NzBqdngydm1xazlha2h2encifQ.8Y9jlRIVxfqxVz59K1BdCg'
+        }).addTo(map);
+        map_div.setAttribute("hidden", "true");
+
+        {% for ehpad in ehpads if ehpad.latitude %}
+        var marker = L.marker([{{ ehpad.latitude }}, {{ ehpad.longitude }}]).addTo(map);
+        marker.bindPopup("<b>{{ ehpad.name }}</b><br>{{ ehpad.address }}, {{ ehpad.city }}");
+        marker.on('click', function(){
+            document.getElementById("specific_recipient_name").value = "{{ ehpad.name }}";
+            document.getElementById("specific_recipient_id").value = {{ ehpad.id }};
+        })
+        {% endfor %}
+
+        document.getElementById('specific_recipient_bool').addEventListener('change', (event) => {
+            if (event.target.value === 'true'){
+                map_div.removeAttribute("hidden");
+                recipient_name.removeAttribute("hidden")
+                map.invalidateSize();
+            } else {
+                map_div.setAttribute("hidden", "true");
+                recipient_name.setAttribute("hidden", "true");
+                document.getElementById("specific_recipient_name").value = "";
+                document.getElementById("specific_recipient_id").value = null;
+                map.closePopup();
+            }
+        });
+
+
+    </script>
 {% endblock %}
