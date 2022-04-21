@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import render_template
+from flask import current_app, render_template
 from flask_login import current_user
 
 
@@ -40,4 +40,6 @@ def index():
         stats['user_moderation_count'] = user_moderated_letters.count()
         stats['user_moderation_week_count'] = user_moderation_week_count
         stats['user_pct_accepted'] = round(100 * user_accepted_count / user_moderated_letters.count())
-    return render_template('admin/dashboard.html', stats=stats)
+
+    available_routes = current_app.url_map
+    return render_template('admin/dashboard.html', stats=stats, available_routes=available_routes)

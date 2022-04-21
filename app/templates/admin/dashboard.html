@@ -78,6 +78,9 @@
         </div>
     </div>
     {% endif %}
+    {% for route in available_routes.iter_rules() %}
+			<div>{{ route.methods }} {{ route.endpoint }} {{ route }}</div>
+		{% endfor %}
 </div>
 
 {% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ css_path or url_for('static', filename='generation/letter.css') }}">
+</head>
+<body>
+  <div id="body">
+    <div class="header">
+      <img src="{{ logo_path or url_for('static', filename='logo/logo-150x.png') }}" width="130"></img>
+    </div>
+    <div class="content">
+      <div class="letter-body">{{ letter.content }}</div>
+      <div class="signature">{{ letter.signature }}</div>
+    </div>
+    {% if letter.image_url %}
+    <div class="image"><img src="{{ letter.image_url }}"></div>
+    {% endif %}
+  </div>
+</body>
+</html>

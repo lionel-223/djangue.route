@@ -54,7 +54,11 @@ class Blueprint(Blueprint):
         if prefix is True:
             prefix = '/' + '/'.join(path)
         name = '_'.join(path)
-        super().__init__(name, module, url_prefix=prefix)
+        super().__init__(
+            name, module,
+            url_prefix=prefix,
+            cli_group=None,
+        )
 
 
 def register_assets(assets):

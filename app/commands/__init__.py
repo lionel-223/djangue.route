@@ -1,5 +1,5 @@
 from app import Blueprint
 
-bp = Blueprint('cli', __name__)
+bp = Blueprint(__name__)
 
-from . import generate_packages, import_legacy_data
+from . import generate_letters, generate_packages, import_legacy_data
