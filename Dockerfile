@@ -1,4 +1,4 @@
-FROM python:3.9-slim AS install-deps
+FROM python:3.10-slim AS install-deps
 
 WORKDIR /app
 
