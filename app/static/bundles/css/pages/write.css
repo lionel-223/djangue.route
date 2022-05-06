@@ -1,0 +1,45 @@
+#write-a-letter {
+	padding-top: 1.5rem;
+}
+
+#letter-box {
+	background-color: var(--gray);
+	padding: 1rem;
+	border-radius: 1rem;
+	box-shadow: 0 8px 20px rgba(35,0,77,.2);
+}
+
+#letter-box input,
+#letter-box textarea {
+	font-size: 1.15rem;
+	border: none;
+	padding: .5rem 1rem;
+	border-radius: .5rem;
+	margin: .5rem 0;
+}
+
+#letter-box textarea {
+	width: 100%;
+	resize: none;
+	height: 15rem;
+}
+
+#letter-box .comma {
+	font-size: 1.75rem;
+	font-weight: bold;
+}
+
+#letter-box [name="greeting"] {
+	margin-right: .5rem;
+	display: inline-block;
+}
+
+#letter-box [name="signature"] {
+	display: block;
+	width: 40%;
+	margin-left: auto;
+}
+
+#about-writter {
+	margin-top: 4rem;
+}

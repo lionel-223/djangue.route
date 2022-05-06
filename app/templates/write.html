@@ -7,21 +7,58 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Ecrivez une lettre</h2>
-    {% if not request.args.is_young %}
-        <p>
-            Si vous souhaitez écrire à un jeune, cliquer sur ce lien :
-            <a href="{{ url_for('main.write', is_young=True) }}" class="button">Écrire à jeune</a>
-        </p>
-    {% endif %}
-    {% include "_form.html" %}
+    <div id="write-a-letter" class="page">
+        <h2>Ecrivez une lettre</h2>
+        <div id="letter-box">
+            <div>
+                {{ form.greeting(placeholder="Cher Monsieur") }}<span class="comma">,</span>
+            </div>
+            <div>
+                {{ form.content }}
+            </div>
+            <div>
+                {{ form.signature(placeholder="Chaleureusement, Alice") }}
+            </div>
+            <div>
+                <p>Je souhaite accompagner ma lettre d'une image :</p>
+                {{ form.upload }}
+            </div>
+        </div>
+
+        <div id="about-writter">
+            <h3>Parlez-nous un peu de vous</h3>
+            <div>
+                {{ form.email.label("Votre email") }}
+                {% if current_user.is_authenticated %}
+                {{ form.email(value=current_user.email) }}
+                {% else %}
+                {{ form.email }}
+                {% endif %}
+            </div>
+            <div>
+                <h4>D'où est-ce que vous écrivez :</h4>
+                {{ form.country_code.label("Pays") }}
+                {{ form.country_code }}
+                {{ form.zipcode.label("Code postal") }}
+                {{ form.zipcode }}
+            </div>
+        </div>
+        <div>
+            <div class="cols">
+                {{ form.terms_agreement }}
+                <label for="{{ form.terms_agreement.id }}">
+                    J'accepte les <a>conditions d'utilisation</a>.
+                </label>
+            </div>
+        </div>
+        <div>
+            {{ form.submit(value="Envoyer") }}
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin="">
-    </script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
     <script>
         var map_div = document.createElement("div");
         map_div.setAttribute("id", "map");
