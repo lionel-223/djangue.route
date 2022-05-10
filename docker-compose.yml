@@ -6,6 +6,7 @@ services:
       - global
     build:
       context: .
+      dockerfile: Dockerfile
       target: install-deps
     ports:
       - 5000:5000
