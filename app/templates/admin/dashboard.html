@@ -15,6 +15,16 @@
 				</li>
 				<li class="collection-item">
 					<div>
+						<span class="title">Reçues par an :</span>
+						<span class="secondary-content">
+							{% for year, amount in stats.per_year_count.items() %}
+							{{ year }}: <span class="locale-number">{{ amount }}</span>{% if not loop.last %}, {% endif %}
+							{% endfor %}
+						</span>
+					</div>
+				</li>
+				<li class="collection-item">
+					<div>
 						<span class="title">Reçues cette semaine :</span>
 						<span class="secondary-content locale-number">{{ stats.letters_week_count }}</span>
 					</div>

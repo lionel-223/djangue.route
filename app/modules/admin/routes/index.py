@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from flask import current_app, render_template
 from flask_login import current_user
 
@@ -8,12 +8,33 @@ from app.models import Letter, Recipient
 from .. import bp
 
 
+def get_count_per_year():
+    results = {}
+    today = date.today()
+    this_year = today.year
+    year = this_year
+    while True:
+        min = datetime(year, 1, 1)
+        max = datetime(year + 1, 1, 1)
+        count = (
+            db.session.query(Letter)
+            .with_entities(Letter.id)
+            .filter(Letter.created_at >= min, Letter.created_at <= max)
+        ).count()
+        if count == 0:
+            break
+        results[year] = count
+        year -= 1
+    return results
+
+
 @bp.route('/')
 def index():
     today = datetime.utcnow()
     week_start = today - timedelta(days=today.weekday(), hours=today.hour, minutes=today.minute, seconds=today.second)
     stats = {
         'letters_count': db.session.query(Letter).count(),
+        'per_year_count': get_count_per_year(),
         'letters_week_count': (
             db.session.query(Letter)
             .filter(Letter.created_at >= week_start)

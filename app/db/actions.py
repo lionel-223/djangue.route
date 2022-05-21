@@ -12,7 +12,7 @@ def add(table, keys=None, commit=True, stage=True, **kwargs):
     if stage and commit:
         session.commit()
     #TODO use the logging lib
-    print('Added', result, 'to db')
+    # print('Added', result, 'to db')
     return result
 
 

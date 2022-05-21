@@ -1,3 +1,8 @@
+"""
+Legacy data refers to data that has been exported directly from the old db,
+using WordPress columns
+"""
+
 import click
 import csv
 import traceback
@@ -114,7 +119,7 @@ class LetterParser:
                     cls.print_letter(letter)
         return result
 
-@bp.cli.command("import")
+@bp.cli.command("import-legacy")
 @click.argument('path')
 def import_file(path: str):
     f = open(path)
