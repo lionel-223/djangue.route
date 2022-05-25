@@ -1,0 +1,17 @@
+input,
+textarea,
+label {
+	display: block;
+	font-family: inherit;
+}
+
+[type="text"], textarea {
+	border: 1px solid var(--body-fg);
+	padding: .3em .5em;
+	border-radius: .5em;
+}
+
+*::placeholder {
+	color: var(--dark-gray);
+}
+

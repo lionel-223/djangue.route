@@ -8,7 +8,7 @@ from app.models import Language, Recipient, Country
 
 
 class LetterForm(FlaskForm):
-    language_code = SelectField(validators=[DataRequired()], default=get_locale)
+    language_code = SelectField(validators=[DataRequired()])
     is_male = SelectField(validators=[InputRequired()], coerce=lambda x: bool(int(x)))
     greeting = StringField(validators=[DataRequired()])
     content = TextAreaField(validators=[DataRequired(), Length(min=120)])
@@ -30,13 +30,14 @@ class LetterForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_male.choices = [
-            ("1", "Un homme"),
             ("0", "Une femme"),
+            ("1", "Un homme"),
         ]
         self.language_code.choices = [
             (language.code, str(language)) for language in
             db.session.query(Language).filter_by(accepts_letters=True)
         ]
+        self.language_code.data = get_locale()
         self.specific_recipient_id.choices = [
             (recipient.id, recipient.name) for recipient
             in db.session.query(Recipient).filter_by(receives_letters=True)
@@ -46,3 +47,4 @@ class LetterForm(FlaskForm):
             in db.session.query(Country)
             if str(country)[0] != '<'  # Exclude untranslated countries
         ]
+        self.country_code.choices.insert(0, (0, "---"))

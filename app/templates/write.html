@@ -9,55 +9,88 @@
 {% block content %}
     <div id="write-a-letter" class="page">
         <h2>Ecrivez une lettre</h2>
-        <div id="letter-box">
-            <div>
-                {{ form.greeting(placeholder="Cher Monsieur") }}<span class="comma">,</span>
+        {% if form.errors and config['DEBUG'] %}
+        {{ form.errors }}
+        {% endif %}
+        <form method="post" id="form">
+            {{ form.hidden_tag() }}
+            <h3>Je souhaite écrire à :</h3>
+            <div class="grid cols" id="gender-select">
+                <div>
+                    <div class="select active" data-is-male=0>
+                        <img src="{{ url_for('static', filename='assets/art/elderly_woman.png') }}">
+                        <p>Une femme agée isolée</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="select" data-is-male=1>
+                        <img src="{{ url_for('static', filename='assets/art/elderly_man.png') }}">
+                        <p>Un homme agé isolé</p>
+                    </div>
+                </div>
             </div>
-            <div>
-                {{ form.content }}
+            <div id="letter-box">
+                <div>
+                    {{ form.greeting(placeholder="Cher Monsieur") }}<span class="comma">,</span>
+                </div>
+                <div>
+                    {{ form.content }}
+                </div>
+                <div>
+                    {{ form.signature(placeholder="Chaleureusement, Alice") }}
+                </div>
+                <div>
+                    <p>Je souhaite accompagner ma lettre d'une image :</p>
+                    {{ form.upload }}
+                </div>
             </div>
-            <div>
-                {{ form.signature(placeholder="Chaleureusement, Alice") }}
-            </div>
-            <div>
-                <p>Je souhaite accompagner ma lettre d'une image :</p>
-                {{ form.upload }}
-            </div>
-        </div>
 
-        <div id="about-writter">
-            <h3>Parlez-nous un peu de vous</h3>
-            <div>
-                {{ form.email.label("Votre email") }}
-                {% if current_user.is_authenticated %}
-                {{ form.email(value=current_user.email) }}
-                {% else %}
-                {{ form.email }}
-                {% endif %}
+            <hr>
+
+            <div id="about-writter">
+                <h3>Vous-y êtes presque</h3>
+                <div class="grid cols aligned">
+                    <div>
+                        <h4>Qui êtes-vous ?</h4>
+                        {{ form.email.label("Votre email") }}
+                        {% if current_user.is_authenticated %}
+                        {{ form.email(value=current_user.email) }}
+                        {% else %}
+                        {{ form.email }}
+                        {% endif %}
+                        <h4>Dans quelle langue est votre lettre ?</h4>
+                        {{ form.language_code.label("Langue") }}
+                        {{ form.language_code }}
+                    </div>
+                    <div>
+                        <h4>D'où écrivez-vous ?</h4>
+                        {{ form.country_code.label("Pays") }}
+                        {{ form.country_code }}
+                        {{ form.zipcode.label("Code postal") }}
+                        {{ form.zipcode }}
+                    </div>
+                </div>
             </div>
-            <div>
-                <h4>D'où est-ce que vous écrivez :</h4>
-                {{ form.country_code.label("Pays") }}
-                {{ form.country_code }}
-                {{ form.zipcode.label("Code postal") }}
-                {{ form.zipcode }}
+            <div class="spaced">
+                <div class="cols">
+                    {{ form.terms_agreement }}
+                    <label for="{{ form.terms_agreement.id }}">
+                        J'accepte les <a>conditions d'utilisation</a>.
+                    </label>
+                </div>
             </div>
-        </div>
-        <div>
-            <div class="cols">
-                {{ form.terms_agreement }}
-                <label for="{{ form.terms_agreement.id }}">
-                    J'accepte les <a>conditions d'utilisation</a>.
-                </label>
+            <div class="grid">
+                {{ form.submit(value="Envoyer ma lettre") }}
             </div>
-        </div>
-        <div>
-            {{ form.submit(value="Envoyer") }}
-        </div>
+            <div class="hidden">
+                {{ form.is_male }}
+            </div>
+        </form>
     </div>
 {% endblock %}
 
 {% block scripts %}
+    <!--
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
     <script>
         var map_div = document.createElement("div");
@@ -65,7 +98,7 @@
         map_div.style.height = '500px';
         map_div.style.width = '500px';
         map_div.style.marginLeft = '50px';
-        var recipient_name = document.querySelector('[data-field-name="specific_recipient_name"]');
+        var recipient_name = document.querySelector('[name="specific_recipient_name"]');
         recipient_name.setAttribute("hidden", "true")
         document.getElementById("form").insertBefore(map_div, recipient_name);
 
@@ -105,4 +138,5 @@
 
 
     </script>
+    -->
 {% endblock %}
