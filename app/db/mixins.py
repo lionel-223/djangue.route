@@ -29,7 +29,7 @@ class LocationMixin:
 
     @orm.declared_attr
     def country_code(_cls):
-        return sa.Column(sa.ForeignKey('countries.code'), nullable=False)
+        return sa.Column(sa.ForeignKey('countries.code'))
 
     @orm.declared_attr
     def country(_cls):
