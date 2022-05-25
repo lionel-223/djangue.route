@@ -1,6 +1,67 @@
 {% extends 'base.html' %}
 
 {% block content %}
-	<h2>Connexion</h2>
-	{% include "_form.html" %}
+    <div class="page" id="login">
+        <div class="grid cols">
+            <div id="login-box">
+                <h2 class="title">Connexion</h2>
+                <form method="post">
+                    {{ form.hidden_tag() }}
+                    <div class="decorated-input spaced">
+                        <label class="decoration" for="{{ form.email.id }}">
+                            <i class="bx bx-user"></i>
+                        </label>
+                        {{ form.email(placeholder="Email") }}
+                    </div>
+
+                    <div class="decorated-input">
+                        <label class="decoration" for="{{ form.password.id }}">
+                            <i class="bx bx-lock-alt"></i>
+                        </label>
+                        {{ form.password(placeholder="Mot de passe") }}
+                    </div>
+
+                    <div class="context-actions">
+                        <a>Identifiants oubliés ?</a>
+                    </div>
+
+                    <div class="col">
+                        {{ form.submit(value="Se connecter") }}
+                    </div>
+                </form>
+            </div>
+
+            <div class="col" id="register-buttons">
+                <h2 class="title">Ouvrir un compte</h2>
+
+                <div class="actions">
+                    <a class="action">
+                        <div class="decoration">
+                            <i class="bx bx-home-heart"></i>
+                        </div>
+                        <div class="content">
+                            <p class="title">Recevoir des lettres</p>
+                            <p>
+                                Pour les administrations et animateurs en EHPAD, ou les
+                                associations, s'inscrire pour recevoir des lettres.
+                            </p>
+                        </div>
+                    </a>
+
+                    <a class="action">
+                        <div class="decoration">
+                            <i class="bx bxs-school"></i>
+                        </div>
+                        <div class="content">
+                            <p class="title">Inscrire une école</p>
+                            <p>
+                                Pour les enseignants qui souhaitent organiser des activités
+                                d'écriture de lettres pour leur classes.
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+        </div>
+    </div>
 {% endblock %}
