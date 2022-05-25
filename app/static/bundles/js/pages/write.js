@@ -28,7 +28,6 @@ if (document.getElementById("write-a-letter")) {
       return;
     let ipapi_result = await fetch('https://ipapi.co/json/');
     ipapi_result = await ipapi_result.json();
-    console.log(`country_code ${ipapi_result.country}`);
     country_code_input.value = ipapi_result.country;
   }
   setCountryCode();
