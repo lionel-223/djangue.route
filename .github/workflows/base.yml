@@ -1,5 +1,3 @@
-
-  
 name: docker-1lettre1sourire
 
 on:
@@ -21,8 +19,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { os: ubuntu-latest}
-          - { os: ubuntu-18.04}
+          - { os: ubuntu-18.04 }
+          - { os: ubuntu-20.04 }
+          - { os: ubuntu-22.04 }
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v3
@@ -57,3 +56,22 @@ jobs:
 
       - name: "Down docker containers"
         run: ./scripts/stop_compose.sh
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    # needs: [build]
+    steps:
+      - name: "Checkout Code"
+        uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+      - name: Python Linter
+        uses: sunnysid3up/python-linter@master
+        with:
+          source: "app"
+          mypy-options: "--ignore-missing-imports --show-error-codes"
+          pylint-options: "--rcfile=setup.cfg"
+          isort-options: "-w 100"
+          django: false
