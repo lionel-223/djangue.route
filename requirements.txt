@@ -17,3 +17,8 @@ SQLAlchemy
 sqlalchemy-utils
 # Postgres support
 psycopg2-binary
+
+# Python analysis
+pylint
+dlint
+flake8
