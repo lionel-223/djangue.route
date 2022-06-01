@@ -52,6 +52,11 @@ a:hover {
 	text-align: var(--center-on-mobile);
 }
 
+.cols {
+	display: flex;
+	flex-direction: row;
+}
+
 .grid.cells {
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	align-items: initial;
@@ -59,7 +64,12 @@ a:hover {
 }
 
 .grid.cols {
+	display: grid;
 	grid-template-columns: repeat(2,1fr);
+}
+
+.grid.cols.aligned {
+	align-items: start;
 }
 
 .grid.cards {
@@ -82,6 +92,7 @@ a, .clickable {
 	cursor: pointer;
 }
 
+[type="submit"],
 .button {
 	display: inline-block;
 	text-align: center;
@@ -89,12 +100,17 @@ a, .clickable {
 	background: var(--yellow);
 	transition: .4s;
 	border-radius: .5rem;
+	border-block: none;
+	border-inline: none;
+	cursor: pointer;
 }
 
+[type="submit"]:hover,
 .button:hover {
 	background: var(--yellow-darker);
 }
 
+[type="submit"], [type="submit"]:hover, [type="submit"]:visited,
 .button, .button:hover, .button:visited {
 	color: var(--body-bg);
 	text-decoration: none;
@@ -107,6 +123,19 @@ a, .clickable {
 h1, h2, h3, h4, .title {
 	color: var(--title-color);
 	font-weight: 600;
+	margin-block-end: .5em;
+}
+
+hr {
+	width: 90%;
+	color: var(--body-fg-light);
+	border-color: var(--body-fg-light);
+	margin: 1em auto;
+}
+
+.spaced {
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 .card {
@@ -121,4 +150,8 @@ h1, h2, h3, h4, .title {
 
 .full-height {
 	min-height: calc(100vh - var(--header-height-total));
+}
+
+.hidden {
+	display: none;
 }

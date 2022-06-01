@@ -27,16 +27,8 @@
 				<div id="nav-menu">
 					<ul id="nav-list">
 						<li><a href="{{ url_for('main.write') }}">Écrire une lettre</a></li>
-						<li><a href="{{ url_for('main.register', next=url_for('main.join_existing_recipient')) }}">Recevoir des lettres</a></li>
-						<li><a href="{{ url_for('main.register', next=url_for('main.join_existing_school')) }}">Espace prof</a></li>
+						<li><a href="{{ url_for('main.login') }}">Espace membre</a></li>
 						<li><a href="{{ url_for('main.index') }}">Contact</a></li>
-						<li>
-                            {% if current_user.is_anonymous %}
-                            <a href="{{ url_for('main.login') }}">Connexion</a>
-                            {% else %}
-                            <a href="{{ url_for('main.user_home') }}">Mon espace</a>
-                            {% endif %}
-                        </li>
 						<li class="socials">
 							<a>
 								<i class="bx bxl-facebook"></i>
@@ -74,11 +66,12 @@
 			<div class="sections grid cells">
 				<section>
 					<a href="{{ url_for('main.index') }}" class="title">1 Lettre 1 Sourire</a>
-					<span class="description">Non Profit</span>
+					<span class="description">Association caritative</span>
 					<div class="socials">
 						<a><i class="bx bxl-facebook"></i></a>
 						<a><i class="bx bxl-instagram"></i></a>
 						<a><i class="bx bxl-twitter"></i></a>
+						<a><i class="bx bxl-tiktok"></i></a>
 					</div>
 				</section>
 				<section>

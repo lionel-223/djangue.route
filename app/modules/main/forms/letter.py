@@ -1,46 +1,50 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, BooleanField, HiddenField, RadioField
-from wtforms.validators import DataRequired, Email, Length, Optional, InputRequired
+from wtforms.validators import DataRequired, Email, Length, InputRequired
 
 from app import db, get_locale
 from app.models import Language, Recipient, Country
 
 
 class LetterForm(FlaskForm):
-    language_code = SelectField("Langue", validators=[DataRequired()], default=get_locale)
-    is_male = SelectField("Tu souhaites écrire à...", validators=[InputRequired()], coerce=lambda x: bool(int(x)))
-    greeting = StringField("Salutation", validators=[DataRequired()])
-    content = TextAreaField("Contenu", validators=[DataRequired(), Length(min=120)])
-    signature = StringField("Signature", validators=[DataRequired()])
-    upload = FileField("Photo", validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    country_code = SelectField("Pays", validators=[DataRequired()])
-    zipcode = StringField("Code postal")
-    specific_recipient_bool = RadioField("Je souhaite choisir un établissement spécifique où sera envoyée ma lettre",
-                                         choices=[("false", "Non"), ("true", "Oui")], default="false")
-    specific_recipient_name = StringField('Ehpad sélectionné', render_kw={'readonly': True})
+    language_code = SelectField(validators=[DataRequired()])
+    is_male = SelectField(validators=[InputRequired()], coerce=lambda x: bool(int(x)))
+    greeting = StringField(validators=[DataRequired()])
+    content = TextAreaField(validators=[DataRequired(), Length(min=120)])
+    signature = StringField(validators=[DataRequired()])
+    upload = FileField(validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    email = StringField(validators=[DataRequired(), Email()])
+    country_code = SelectField(validators=[DataRequired()])
+    zipcode = StringField()
+    specific_recipient_bool = RadioField(
+        choices=[("false", "Non"), ("true", "Oui")],
+        default="false",
+    )
+    specific_recipient_name = StringField(render_kw={'readonly': True})
     specific_recipient_id = HiddenField()
-    terms_agreement = BooleanField("J'accepte les conditions", validators=[DataRequired()])
-    allow_reuse = BooleanField("J'autorise l'utilisation de ma lettre anonymisée sur les réseaux sociaux")
-    submit = SubmitField("Envoyer")
+    terms_agreement = BooleanField(validators=[DataRequired()])
+    allow_reuse = BooleanField()
+    submit = SubmitField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_male.choices = [
-            ("1", "Un homme"),
             ("0", "Une femme"),
+            ("1", "Un homme"),
         ]
         self.language_code.choices = [
             (language.code, str(language)) for language in
             db.session.query(Language).filter_by(accepts_letters=True)
         ]
+        self.language_code.data = get_locale()
         self.specific_recipient_id.choices = [
-                                                 (recipient.id, recipient.name) for recipient
-                                                 in db.session.query(Recipient).filter_by(receives_letters=True)
-                                             ] + [('', "Au hasard")]
+            (recipient.id, recipient.name) for recipient
+            in db.session.query(Recipient).filter_by(receives_letters=True)
+        ] + [('', "Au hasard")]
         self.country_code.choices = [
             (country.code, str(country)) for country
             in db.session.query(Country)
             if str(country)[0] != '<'  # Exclude untranslated countries
         ]
+        self.country_code.choices.insert(0, (0, "---"))

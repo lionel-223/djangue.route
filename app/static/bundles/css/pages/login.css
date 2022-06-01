@@ -1,0 +1,70 @@
+#login {
+	padding-top: 4em;
+}
+
+#login-box {
+	background: var(--gray);
+	border-radius: 1rem;
+	padding: 4em 1em;
+	box-shadow: 0 8px 20px rgba(35,0,77,.2);
+	max-width: 384px;
+	margin: auto;
+}
+
+#login-box .title {
+	font-size: 2em;
+	margin: 0;
+	text-align: center;
+}
+
+#login-box .decorated-input {
+	font-size: 1.6em;
+}
+
+#login-box .context-actions {
+	text-align: right;
+	margin-bottom: 1.5em;
+}
+
+#login-box .context-actions a {
+	color: black;
+}
+
+#register-buttons {
+	margin: 0 2em;
+}
+
+#register-buttons .title {
+	font-size: 2em;
+	margin-top: 0;
+}
+
+#register-buttons .action {
+	box-shadow: 0 8px 20px rgba(35,0,77,.2);
+	padding: 1em;
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 2em;
+	border-radius: 1rem;
+	color: initial;
+	text-decoration: none;
+}
+
+#register-buttons .action:hover {
+	background: var(--yellow-muted);
+}
+
+#register-buttons .decoration {
+	color: var(--yellow);
+	font-size: 4rem;
+	align-self: center;
+}
+
+#register-buttons .content {
+	width: 100%;
+	margin-left: 1em;
+}
+
+#register-buttons .content .title {
+	font-size: 1.3em;
+}

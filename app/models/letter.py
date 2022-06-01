@@ -37,16 +37,16 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
                 self.other: 'Autre',
             }.get(self, self.name)
 
-    email = sa.Column(sa.String, nullable=False)
+    email = sa.Column(sa.String) # nullable due to legacy data
     event = sa.Column(sa.String)
     writing_session_id = sa.Column(sa.ForeignKey('writing_sessions.id'))
     is_male = sa.Column(sa.Boolean, nullable=False, server_default="1")
     is_young = sa.Column(sa.Boolean)
     content = sa.Column(sa.String, nullable=False)
-    signature = sa.Column(sa.String, nullable=False)
+    signature = sa.Column(sa.String) # nullable due to legacy data
     allow_reuse = sa.Column(sa.Boolean, nullable=False)
     specific_recipient_id = sa.Column(sa.ForeignKey('recipients.id'))
-    language_code = sa.Column(sa.ForeignKey('languages.code'), nullable=False)
+    language_code = sa.Column(sa.ForeignKey('languages.code')) # nullable due to legacy data
     upload_hash = sa.Column(sa.ForeignKey('uploads.hash'))
     status = sa.Column(sa.Enum(Status, native_enum=False), server_default="not_moderated")
     theme = sa.Column(sa.Enum(Theme, native_enum=False))    # If not null, it means the letter is marked as a "favorite"
@@ -64,3 +64,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     @property
     def is_currently_reviewed(self):
         return self.status == "not_moderated" and self.moderation_time > datetime.utcnow() - timedelta(hours=1)
+
+    @property
+    def is_favorite(self):
+        return self.theme != None

@@ -1,0 +1,22 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<ul class="collection">
+				{% for name, data in stats.items() %}
+				<li class="collection-item">
+					<div>
+						<span class="title">{{ name }}</span>
+						<span class="secondary-content">{{ data }}
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
