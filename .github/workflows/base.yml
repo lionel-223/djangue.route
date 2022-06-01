@@ -29,9 +29,6 @@ jobs:
           submodules: "recursive"
           fetch-depth: 0
 
-      - name: Change scripts permissions
-        run: chmod +x ./scripts/start_compose.sh && chmod +x ./scripts/stop_compose.sh
-
       - name: "Up docker containers"
         run: ./scripts/start_compose.sh -d
 
