@@ -1,4 +1,5 @@
-FROM python:3.10-slim AS install-deps
+ARG DOCKER_IMAGE=python:3.10-slim
+FROM $DOCKER_IMAGE AS install-deps
 
 WORKDIR /app
 
