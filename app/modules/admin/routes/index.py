@@ -48,14 +48,14 @@ def index():
             db.session.query(Letter)
             .filter(Letter.status == Letter.Status.not_moderated)
         ).count(),
-        'ehpad_count': db.session.query(Recipient).filter_by(type=Recipient.Types.retirement_home).count(),
-        'associations_count': db.session.query(Recipient).filter_by(type=Recipient.Types.association).count(),
+        'ehpad_count': db.session.query(Recipient).filter_by(type=Recipient.Types.RETIREMENT_HOME).count(),
+        'associations_count': db.session.query(Recipient).filter_by(type=Recipient.Types.ASSOCIATION).count(),
         'unique_emails_count': db.session.query(Letter).distinct(Letter.email).count(),
     }
-    user_moderated_letters = db.session.query(Letter).filter((Letter.moderator == current_user) &
-                                                            (Letter.status.in_([Letter.Status.approved,
-                                                                                Letter.Status.rejected])
-                                                             ))
+    user_moderated_letters = db.session.query(Letter).filter(
+        (Letter.moderator == current_user),
+        (Letter.status.in_([Letter.Status.approved, Letter.Status.rejected]))
+    )
     user_moderation_week_count = user_moderated_letters.filter(Letter.moderation_time >= week_start).count()
     user_accepted_count = user_moderated_letters.filter_by(status=Letter.Status.approved).count()
     if user_moderated_letters.count() > 0:

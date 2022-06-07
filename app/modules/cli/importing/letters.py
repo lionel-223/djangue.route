@@ -12,7 +12,7 @@ from datetime import datetime
 
 from app import db
 from app.models import Country, Letter
-from . import bp
+from . import group
 from scripts.import_countries_and_langs import get_countries_data
 
 
@@ -54,9 +54,8 @@ def parse(row: dict, country_matcher):
         'language_code': get('language_code'),
     }
 
-@bp.cli.command('import-exported')
-@click.argument('path')
-def import_exported_file(path: str):
+@group.command('letters')
+def import_letters(path: str):
     ids = [x.id for x in db.session.query(Letter).with_entities(Letter.id)]
     ids = set(ids)
     countries_data = get_countries_data()

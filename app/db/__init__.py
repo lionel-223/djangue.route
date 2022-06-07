@@ -25,5 +25,5 @@ session = Session()
 if not sa_utils.database_exists(engine.url):
     sa_utils.create_database(engine.url)
 
-from .actions import get_or_create
+from .actions import Action, get_or_create
 from .mixins import IdMixin, KeyMixin, TimedMixin, LocationMixin
