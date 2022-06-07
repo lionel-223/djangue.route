@@ -50,6 +50,7 @@ def index():
         ).count(),
         'ehpad_count': db.session.query(Recipient).filter_by(type=Recipient.Types.retirement_home).count(),
         'associations_count': db.session.query(Recipient).filter_by(type=Recipient.Types.association).count(),
+        'unique_emails_count': db.session.query(Letter).distinct(Letter.email).count(),
     }
     user_moderated_letters = db.session.query(Letter).filter((Letter.moderator == current_user) &
                                                             (Letter.status.in_([Letter.Status.approved,
