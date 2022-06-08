@@ -10,17 +10,17 @@ from app import db
 
 class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
     class Status(enum.Enum):
-        not_corrected = enum.auto()
-        not_moderated = enum.auto()
-        approved = enum.auto()
-        rejected = enum.auto()
+        NOT_CORRECTED = enum.auto()
+        NOT_MODERATED = enum.auto()
+        APPROVED = enum.auto()
+        REJECTED = enum.auto()
 
         def __str__(self):
             return {
-                self.not_corrected: 'A corriger par le prof',
-                self.not_moderated: 'A modérer',
-                self.approved: 'Approuvée',
-                self.rejected: 'Refusée',
+                self.NOT_CORRECTED: 'A corriger par le prof',
+                self.NOT_MODERATED: 'A modérer',
+                self.APPROVED: 'Approuvée',
+                self.REJECTED: 'Refusée',
             }.get(self, self.name)
 
     class Theme(enum.Enum):
@@ -63,7 +63,7 @@ class Letter(db.TimedMixin, db.IdMixin, db.LocationMixin, db.Base):
 
     @property
     def is_currently_reviewed(self):
-        return self.status == "not_moderated" and self.moderation_time > datetime.utcnow() - timedelta(hours=1)
+        return self.status == self.Status.NOT_MODERATED and self.moderation_time > datetime.utcnow() - timedelta(hours=1)
 
     @property
     def is_favorite(self):

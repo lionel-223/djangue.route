@@ -1,9 +1,10 @@
+import functools
+import click
 from pathlib import Path
 
-from app import db
+from app import db, IMPORT_FOLDER
 from app.models import Country, Language, Recipient
 from app.utils.model import Model
-from scripts.import_countries_and_langs import get_countries_data
 from . import group, read_file
 
 
@@ -16,20 +17,27 @@ def get_language(d: dict):
     return db.session.get(Language, d['lang'])
 
 
-def get_country(d: dict):
+@functools.cache
+def country_by_name(x: str):
+    x = {
+        'Belgique': 'Belgium',
+        'Royaume-Uni': 'United Kingdom',
+    }.get(x, x)
     global country_data
-    if 'country' not in d:
-        return None
     if not country_data:
         country_data = {
-            x['Country']:
-            x['Alpha-2 code']
-            for x in get_countries_data()
+            x.name: x
+            for x in db.session.query(Country)
         }
-    country = country_data.get(d['country'])
-    if not country:
+    return country_data.get(x)
+
+
+
+def get_country(d: dict):
+    if 'country' not in d:
         return None
-    return db.session.get(Country, country)
+    result = country_by_name(d['country'])
+    return result
 
 
 def get_nb_letters(d: dict):
@@ -84,5 +92,6 @@ def import_ehpads(path: Path):
 
 
 @group.command('ehpads')
+@click.argument('path', type=Path, default=IMPORT_FOLDER / 'ehpads.json')
 def ehpads(path: Path):
     import_ehpads(path)

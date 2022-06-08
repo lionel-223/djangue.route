@@ -59,7 +59,7 @@ def get_or_create(
     action=Action,
     **kwargs,
 ):
-    create_keys = create_keys or {}
+    create_keys = (create_keys or {}) | kwargs
     search_keys = {}
     filter_keys = filter_keys or []
     for key in filter_keys:
