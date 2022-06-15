@@ -1,3 +1,4 @@
+from pathlib import Path
 import click
 import json
 
@@ -8,23 +9,22 @@ from app.modules.generation import (
 
 
 @bp.cli.command('generate')
-@click.option('-d', '--data')
-def generate(data):
-    letters = None
+@click.argument('file', type=Path)
+def generate(file):
+    def normalize(d):
+        if 'joined_content' in d and not 'signature' in d:
+            d['content'] = d.pop('joined_content')
+            if 'greeting' in d:
+                d.pop('greeting')
+        d['image_url'] = d.pop('image')
+        return d
 
-    if data:
-        def normalize(d):
-            if 'joined_content' in d and not 'signature' in d:
-                d['content'] = d.pop('joined_content')
-                if 'greeting' in d:
-                    d.pop('greeting')
-            d['image_url'] = d.pop('image')
-            return d
-        with open(data) as f:
-            data = json.load(f)
-        letters = (LetterSchema(raw_dict=normalize(x)) for x in data)
-    if not letters:
-        raise Exception('No letters')
+    with file.open() as f:
+        data = json.load(f)
+
+    letters = (LetterSchema(raw_dict=normalize(x)) for x in data)
     result = pdf_from_letters(letters=letters)
-    with open('output.pdf', 'wb') as f:
+    output = Path('./output.pdf')
+    with output.open('wb') as f:
         f.write(result)
+    print('Wrote file to', output)
