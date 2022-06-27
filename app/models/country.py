@@ -15,6 +15,7 @@ class Country(db.Base):
     # ISO-3166-1 alpha-2: 2 letter code
     # See https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
     code = sa.Column(sa.String, nullable=False, primary_key=True)
+    name = sa.Column(sa.String)
 
     def __str__(self):
-        return COUNTRY_NAMES.get(self.code, repr(self))
+        return COUNTRY_NAMES.get(self.code, self.name)

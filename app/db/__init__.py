@@ -22,8 +22,12 @@ engine: Engine = sa.create_engine(config.DB_URL)
 Session = orm.sessionmaker(bind=engine, autoflush=False)
 session = Session()
 
-if not sa_utils.database_exists(engine.url):
-    sa_utils.create_database(engine.url)
+try:
+    if not sa_utils.database_exists(engine.url):
+        sa_utils.create_database(engine.url)
+except Exception as e:
+    print('Could not create database, error:')
+    print(e)
 
-from .actions import get_or_create
+from .actions import Action, get_or_create
 from .mixins import IdMixin, KeyMixin, TimedMixin, LocationMixin

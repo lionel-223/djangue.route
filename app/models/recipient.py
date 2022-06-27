@@ -18,29 +18,30 @@ recipients_languages = sa.Table(
 
 class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
     class Types(enum.Enum):
-        retirement_home = enum.auto()
-        association = enum.auto()
+        RETIREMENT_HOME = enum.auto()
+        ASSOCIATION = enum.auto()
 
         def __str__(self):
             return {
-                self.retirement_home: 'EHPAD',
-                self.association: 'Association',
+                self.RETIREMENT_HOME: 'EHPAD',
+                self.ASSOCIATION: 'ASsociation',
             }.get(self, self.name)
 
     class Status(enum.Enum):
-        not_moderated = enum.auto()
-        approved = enum.auto()
-        rejected = enum.auto()
+        NOT_MODERATED = enum.auto()
+        APPROVED = enum.auto()
+        REJECTED = enum.auto()
 
         def __str__(self):
             return {
-                self.not_moderated: 'A modérer',
-                self.approved: 'Approuvé',
-                self.rejected: 'Refusé',
+                self.NOT_MODERATED: 'A modérer',
+                self.APPROVED: 'Approuvé',
+                self.REJECTED: 'Refusé',
             }.get(self, self.name)
 
     email = sa.Column(sa.String)
     name = sa.Column(sa.String)
+    phone = sa.Column(sa.String) # Should be validated as E.164 standard
     receives_letters = sa.Column(sa.Boolean)
     nb_letters = sa.Column(sa.Integer)
     frequency = sa.Column(sa.Integer)  # Nb of months between each letters pack sent
@@ -54,7 +55,11 @@ class Recipient(db.IdMixin, db.TimedMixin, db.LocationMixin, db.Base):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.latitude, self.longitude = get_lat_long(self.address, self.city, self.zipcode, self.country_code)
+        if (
+            ('latitude' not in kwargs and 'longitude' not in kwargs)
+            and (self.address and self.city and self.zipcode and self.country_code)
+        ):
+            self.latitude, self.longitude = get_lat_long(self.address, self.city, self.zipcode, self.country_code)
 
     @property
     def received_letters(self):

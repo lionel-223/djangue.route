@@ -7,6 +7,7 @@ from typing import Iterable
 from .schema import LetterSchema
 
 
+CAPTURE_OUTPUT = False
 DPI = 96
 MARGIN_BOTTOM = 25
 MARGIN_TOP = 25
@@ -45,8 +46,9 @@ def pdf_from_letters(*args: LetterSchema, letters=None):
                 f'{BASE_FOOTER}\nID {letter.id} - {letter.email}'
             ]
         cmd += [str(output)]
-        logs = subprocess.run(cmd, capture_output=True)
-        print(logs.stdout)
-        print(logs.stderr, file=sys.stderr)
+        logs = subprocess.run(cmd, capture_output=CAPTURE_OUTPUT)
+        if CAPTURE_OUTPUT:
+            print(logs.stdout.decode())
+            print(logs.stderr.decode(), file=sys.stderr)
         result = output.read_bytes()
     return result

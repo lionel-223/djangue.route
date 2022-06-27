@@ -38,7 +38,7 @@ def write():
             form.language_code.data = writing_session.language_code
             form.country_code.data = writing_session.school.country_code
             form.zipcode.data = writing_session.school.zipcode
-        ehpads = db.session.query(Recipient).filter(Recipient.type == Recipient.Types.retirement_home)
+        ehpads = db.session.query(Recipient).filter(Recipient.type == Recipient.Types.RETIREMENT_HOME)
         return render_template('write.html', form=form, ehpads=ehpads)
 
     greeting = form.greeting.data
@@ -60,7 +60,7 @@ def write():
     )
     if writing_session:
         letter.specific_recipient = writing_session.school.associated_recipient
-        letter.status = Letter.Status.not_corrected
+        letter.status = Letter.Status.NOT_CORRECTED
 
     file = form.upload.data
     upload_directory = app.FILE_UPLOAD_FOLDER

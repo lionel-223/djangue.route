@@ -6,28 +6,21 @@ column names that are the same as the ones of the new db, or close to them
 import functools
 import traceback
 from typing import Type
-import click
 import csv
 from datetime import datetime
 
 from app import db
 from app.models import Country, Letter
-from . import bp
-from scripts.import_countries_and_langs import get_countries_data
+from . import group
 
 
 @functools.cache
-def generate_country_matcher(countries_data):
-    code_by_name = {x['Country']: x['Alpha-2 code'] for x in countries_data}
-    def matcher(name: str):
-        return (
-            db.session.query(Country)
-            .filter_by(code=code_by_name.get(name))
-        ).first()
-    return matcher
+def get_country(x):
+    if not x:
+        return None
+    return db.session.query(Country).filter_by(name=x).first()
 
-
-def parse(row: dict, country_matcher):
+def parse(row: dict):
     def get(key: str, type: Type = str, func=None):
         result = row.get(key, '').strip()
         if func:
@@ -50,17 +43,14 @@ def parse(row: dict, country_matcher):
         'allow_reuse': get('allow_reuse', bool),
         'city': get('city'),
         'zipcode': get('zipcode'),
-        'country': country_matcher(get('country')),
+        'country': get_country((get('country'))),
         'language_code': get('language_code'),
     }
 
-@bp.cli.command('import-exported')
-@click.argument('path')
-def import_exported_file(path: str):
+@group.command('letters')
+def import_letters(path: str):
     ids = [x.id for x in db.session.query(Letter).with_entities(Letter.id)]
     ids = set(ids)
-    countries_data = get_countries_data()
-    country_matcher = generate_country_matcher(countries_data)
     f = open(path)
     reader = csv.DictReader(f)
     data = reader
@@ -69,9 +59,9 @@ def import_exported_file(path: str):
             print(f'Importing {i}th letter')
         if row['id'] in ids:
             continue
-        letter_data = parse(row, country_matcher)
+        letter_data = parse(row)
         try:
-            db.get_or_create(Letter, {'id': letter_data['id']}, letter_data, commit=False)
+            db.get_or_create(Letter, letter_data, ['id'], commit=False)
             db.session.flush()
         except Exception:
             db.session.rollback()

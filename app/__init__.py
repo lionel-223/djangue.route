@@ -13,6 +13,7 @@ from app import config
 assets = Environment()
 babel = Babel()
 APP_FOLDER = Path(__file__).parent
+IMPORT_FOLDER = APP_FOLDER.parent / 'import'
 MODULES_FOLDER = APP_FOLDER / 'modules'
 PDF_UPLOAD_FOLDER = os.path.join(APP_FOLDER, 'uploads', 'letter_packages')
 FILE_UPLOAD_FOLDER = os.path.join(APP_FOLDER, 'uploads', 'image_upload')
@@ -94,8 +95,6 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return db.session.get(User, int(user_id))
-
-    init_static_data()
 
     return app
 
