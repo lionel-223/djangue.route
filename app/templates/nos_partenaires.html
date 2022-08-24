@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<main id="landing">
+	<section id="home">
+            <div>
+                <img src="{{ url_for('static', filename='assets/stock/nos partenaires.jpeg') }}">
+                <p>Ceci est la page Nos contacts</p>
+            </div>
+	</section>
+
+</main>
+{% endblock %}
